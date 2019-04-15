@@ -25,7 +25,73 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "bundleIdentifier": "",
+      "buildNumber": "0.1",
+      "icon": "./assets/icon.png",
+      "appStoreUrl": "https://itunes.apple.com/fr/app/allocin%C3%A9-cin%C3%A9ma-et-s%C3%A9ries/id351184863?mt=8",
+      "supportsTablet": false,
+      "isTabletOnly": false,
+      "infoPlist": {
+        "NSLocationAlwaysAndWhenInUseUsageDescription" : "Location is required to find nearest cinemas",
+        "NSLocationUsageDescription": "Location is required to find nearest cinemas",
+        "NSLocationAlwaysUsageDescription": "Location is required to find nearest cinemas",
+        "NSLocationWhenInUseUsageDescription" : "Location is required to find nearest cinemas",
+        "NSLocationAlwaysUsage" : "Location is required to find nearest cinemas"
+      },
+      "usesIcloudStorage": false,
+      "config": {
+        "googleMapsApiKey": ""
+      }
+    },
+    "androidStatusBarColor": "#303a59",
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#303a59"
+    },
+    "notification": {
+      "icon": "./assets/notification-icon.png",
+      "color": "#303a59",
+      "androidMode": "default",
+      "androidCollapsedTitle": "PopCorn"
+    },
+    "android": {
+      "package": "",
+      "versionCode": 3,
+      "icon": "./assets/icon.png",
+      "playStoreUrl": "",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "MANAGE_DOCUMENTS",
+        "READ_EXTERNAL_STORAGE",
+        "READ_PHONE_STATE",
+        "VIBRATE",
+        "WAKE_LOCK",
+        "WRITE_EXTERNAL_STORAGE",
+        "com.anddoes.launcher.permission.UPDATE_COUNT",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+        "com.google.android.providers.gsf.permission.READ_GSERVICES",
+        "com.htc.launcher.permission.READ_SETTINGS",
+        "com.htc.launcher.permission.UPDATE_SHORTCUT",
+        "com.majeur.launcher.permission.UPDATE_BADGE",
+        "com.sec.android.provider.badge.permission.READ",
+        "com.sec.android.provider.badge.permission.WRITE",
+        "com.sonyericsson.home.permission.BROADCAST_BADGE"
+      ],
+
+      "config": {
+        "googleMaps": {
+          "apiKey": ""
+        }
+      },
+      "splash": {
+        "backgroundColor": "#303a59",
+        "resizeMode": "contain"
+      }
+    },
+    "scheme": "sporty"
   }
 }
