@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Sporty",
+    "description": "Projet annuel sur le Football",
+    "slug": "Sporty",
+    "privacy": "unlisted",
+    "sdkVersion": "32.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "0.3",
+    "orientation": "portrait",
+    "primaryColor": "#303a59",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
