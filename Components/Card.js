@@ -12,9 +12,9 @@ class Card extends React.Component {
 
         return (
             <View>
-                <TouchableOpacity style={card.container} onPress={() => (type == 'season') ? displaySeason(serieId, id) : ((type == 'episode') ? displayEpisode(serieId, seasonId, id) : (displayDetail(id, type)))}>
+                <TouchableOpacity style={card.container} onPress={() => console.log("test")}>
                     <View style={card.image_container}>
-                        <Image style={card.image} source={ (image) ? { uri: getImageFromApi(image, 342) } : (type == 'person') ? ( (gender == 2 ) ? require('../Images/default_men.png') : require('../Images/default_women.jpg') ) : require('../Images/default.png') } />
+                        <Image style={card.image} source={ (image) ? { uri: getImageFromApi(image, 342) } : require('../Images/default.png') } />
                     </View>
                     <View style={card.info_container}>
                         <Text numberOfLines={2} style={card.title}>{name}</Text>

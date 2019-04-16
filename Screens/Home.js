@@ -85,7 +85,7 @@ class Home extends React.Component {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
-                        <Text style={styles.title}>Découvrir</Text>
+                        <Text style={styles.title}>Sporty</Text>
                     </View>
                 </ScrollView>
             )

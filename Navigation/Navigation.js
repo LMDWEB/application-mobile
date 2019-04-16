@@ -33,7 +33,7 @@ const TabNavigator = createBottomTabNavigator({
             navigationOptions: {
                 title: 'Accueil',
                 tabBarIcon: ({tintColor}) => {
-                    return <FontAwesome name="futbol" size={20} color={tintColor} />
+                    return <FontAwesome name="futbol-o" size={20} color={tintColor} />
                 }
 
             }
@@ -44,7 +44,7 @@ const TabNavigator = createBottomTabNavigator({
             navigationOptions: {
                 title: 'Paramètres',
                 tabBarIcon: ({tintColor}) => {
-                    return <FontAwesome name="futbol" size={20} color={tintColor} />
+                    return <FontAwesome name="futbol-o" size={20} color={tintColor} />
                 }
             }
         }
