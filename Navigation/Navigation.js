@@ -4,7 +4,9 @@ import Home from "../Screens/Home";
 import News from "../Screens/News";
 import NewsDetail from "../Components/NewsDetail";
 import Ranking from "../Screens/Ranking";
+import LeagueMatchs from "../Components/LeagueMatchs";
 import Matchs from "../Screens/Matchs";
+import MatchDetail from "../Components/MatchDetail";
 import Settings from "../Screens/Settings";
 import config from "../config"
 
@@ -33,12 +35,35 @@ const RankingStackNavigator = createStackNavigator({
         screen: Ranking,
         navigationOptions: options
     },
+
+    LeagueMatchs : {
+        screen: LeagueMatchs,
+        navigationOptions: options
+    },
+
+    MatchDetail : {
+        screen: MatchDetail,
+        navigationOptions: options
+    }
 });
 
 const MatchsStackNavigator = createStackNavigator({
 
     Matchs : {
         screen: Matchs,
+        navigationOptions: options
+    },
+
+    MatchDetail : {
+        screen: MatchDetail,
+        navigationOptions: options
+    }
+});
+
+const SettingsStackNavigator = createStackNavigator({
+
+    Settings : {
+        screen: Settings,
         navigationOptions: options
     },
 });
@@ -72,6 +97,16 @@ const TabNavigator = createBottomTabNavigator({
                 title: 'Matchs',
                 tabBarIcon: ({tintColor}) => {
                     return <FontAwesome name="futbol-o" size={20} color={tintColor} />
+                }
+            }
+        },
+
+        Settings : {
+            screen: SettingsStackNavigator,
+            navigationOptions: {
+                title: 'Paramètres',
+                tabBarIcon: ({tintColor}) => {
+                    return <FontAwesome name="cog" size={20} color={tintColor} />
                 }
             }
         }

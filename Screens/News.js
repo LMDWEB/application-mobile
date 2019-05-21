@@ -99,7 +99,6 @@ class News extends React.Component {
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Article data={item} displayDetail={this._displayDetail}></Article>}
                         />
-
                     </View>
                 </ScrollView>
             )

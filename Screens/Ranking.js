@@ -1,11 +1,13 @@
 import React from 'react'
 import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
 import styles from '../Style/Style'
-import { Container, Header, Title, Content, Left, Right, Body, Text} from 'native-base';
-import Card from "../Components/Card"
+import { Container, Header, Title, Content, Left, Right, Body, Text, List} from 'native-base';
+import League from "../Components/League"
+import sporty from "../Api/Sporty"
 import { FontAwesome } from '@expo/vector-icons';
 import {Linking} from "expo";
 import config from '../config'
+import Article from "../Components/Article";
 
 class Ranking extends React.Component {
 
@@ -13,6 +15,7 @@ class Ranking extends React.Component {
         super(props);
 
         this.state = {
+            leagues : [],
             isOnline: true,
             isLoading : false,
             refreshing: false,
@@ -31,6 +34,7 @@ class Ranking extends React.Component {
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
                 this.setState({
+                    leagues : sporty,
                     isLoading: false,
                     isOnline: true,
                     refreshing: false
@@ -80,12 +84,21 @@ class Ranking extends React.Component {
         }
     }
 
-    _displayHome () {
+    _displayDetail = (id) => {
+        this.props.navigation.navigate('LeagueMatchs', { id: id })
+    };
+
+    _displayLeagues () {
         if (this.state.isOnline && !this.state.isLoading) {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
-                        <Text style={styles.title}>Sporty</Text>
+                        <Text style={styles.title}>Compétitions</Text>
+                        <FlatList
+                            data={this.state.leagues}
+                            keyExtractor={(item) => item.league_id.toString()}
+                            renderItem={({item}) => <League data={item} displayDetail={this._displayDetail}></League>}
+                        />
                     </View>
                 </ScrollView>
             )
@@ -98,7 +111,7 @@ class Ranking extends React.Component {
                 <Header style={{ backgroundColor: config.primary_color }}>
                     <Left/>
                     <Body>
-                        <Title style={{color:'white'}}>Accueil</Title>
+                        <Title style={{color:'white'}}>Classement</Title>
                     </Body>
                     <Right/>
                 </Header>
@@ -106,7 +119,7 @@ class Ranking extends React.Component {
                     <Content contentContainerStyle={{flex: 1}}>
                         {this._displayLoading()}
                         {this._displayOffline()}
-                        {this._displayHome()}
+                        {this._displayLeagues()}
                     </Content>
                 </View>
             </Container>

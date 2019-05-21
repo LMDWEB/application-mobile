@@ -1,11 +1,11 @@
 import React from 'react'
 import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
 import styles from '../Style/Style'
-import { Container, Header, Title, Content, Left, Right, Body, Text} from 'native-base';
-import Card from "../Components/Card"
+import { Container, Header, Title, Content, Left, Right, Body, Text, Separator} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
-import {Linking} from "expo";
 import config from '../config'
+import Match from "../Components/Match";
+import matchs from '../Api/Matchs'
 
 class Matchs extends React.Component {
 
@@ -13,6 +13,9 @@ class Matchs extends React.Component {
         super(props);
 
         this.state = {
+            matchsOnline: [],
+            matchsEnded: [],
+            matchsFuture: [],
             isOnline: true,
             isLoading : false,
             refreshing: false,
@@ -31,6 +34,9 @@ class Matchs extends React.Component {
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
                 this.setState({
+                    matchOnline: matchs,
+                    matchsEnded: matchs,
+                    matchsFuture: matchs,
                     isLoading: false,
                     isOnline: true,
                     refreshing: false
@@ -80,12 +86,33 @@ class Matchs extends React.Component {
         }
     }
 
-    _displayHome () {
+    _displayDetail = (id) => {
+        this.props.navigation.push('MatchDetail', { id: id })
+    };
+
+    _displayMatchs () {
         if (this.state.isOnline && !this.state.isLoading) {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
-                        <Text style={styles.title}>Sporty</Text>
+                        <Text style={styles.title}>Match en cours</Text>
+                        <FlatList
+                            data={matchs.slice(0,4)}
+                            keyExtractor={(item) => item.fixture_id}
+                            renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
+                        />
+                        <Text style={styles.title}>Match terminé</Text>
+                        <FlatList
+                            data={matchs.slice(2,5)}
+                            keyExtractor={(item) => item.fixture_id}
+                            renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
+                        />
+                        <Text style={styles.title}>Match à venir</Text>
+                        <FlatList
+                            data={matchs.slice(2,6)}
+                            keyExtractor={(item) => item.fixture_id}
+                            renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
+                        />
                     </View>
                 </ScrollView>
             )
@@ -98,7 +125,7 @@ class Matchs extends React.Component {
                 <Header style={{ backgroundColor: config.primary_color }}>
                     <Left/>
                     <Body>
-                        <Title style={{color:'white'}}>Accueil</Title>
+                        <Title style={{color:'white'}}>Matchs</Title>
                     </Body>
                     <Right/>
                 </Header>
@@ -106,7 +133,7 @@ class Matchs extends React.Component {
                     <Content contentContainerStyle={{flex: 1}}>
                         {this._displayLoading()}
                         {this._displayOffline()}
-                        {this._displayHome()}
+                        {this._displayMatchs()}
                     </Content>
                 </View>
             </Container>
