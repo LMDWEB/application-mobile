@@ -4,4 +4,5 @@ export default config = {
     background_color: '',
 
     api_key_sporty: '',
+    api_key_strapi: '',
 }

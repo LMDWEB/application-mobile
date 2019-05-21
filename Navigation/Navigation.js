@@ -1,6 +1,10 @@
 import React from 'react'
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation'
 import Home from "../Screens/Home";
+import News from "../Screens/News";
+import NewsDetail from "../Components/NewsDetail";
+import Ranking from "../Screens/Ranking";
+import Matchs from "../Screens/Matchs";
 import Settings from "../Screens/Settings";
 import config from "../config"
 
@@ -10,39 +14,62 @@ const options = {
     header: null
 };
 
-const HomeStackNavigator = createStackNavigator({
-    Home : {
-        screen: Home,
+const NewsStackNavigator = createStackNavigator({
+    News : {
+        screen: News,
+        navigationOptions : options
+    },
+
+    NewsDetail : {
+        screen: NewsDetail,
         navigationOptions : options
     }
 });
 
 
-const SettingsStackNavigator = createStackNavigator({
+const RankingStackNavigator = createStackNavigator({
 
-    Settings : {
-        screen: Settings,
+    Ranking : {
+        screen: Ranking,
+        navigationOptions: options
+    },
+});
+
+const MatchsStackNavigator = createStackNavigator({
+
+    Matchs : {
+        screen: Matchs,
         navigationOptions: options
     },
 });
 
 const TabNavigator = createBottomTabNavigator({
 
-        Home: {
-            screen: HomeStackNavigator,
+        News: {
+            screen: NewsStackNavigator,
             navigationOptions: {
-                title: 'Accueil',
+                title: 'News',
                 tabBarIcon: ({tintColor}) => {
-                    return <FontAwesome name="futbol-o" size={20} color={tintColor} />
+                    return <FontAwesome name="newspaper-o" size={20} color={tintColor} />
                 }
 
             }
         },
 
-        Settings : {
-            screen: SettingsStackNavigator,
+        Ranking : {
+            screen: RankingStackNavigator,
             navigationOptions: {
-                title: 'Paramètres',
+                title: 'Classement',
+                tabBarIcon: ({tintColor}) => {
+                    return <FontAwesome name="bar-chart" size={20} color={tintColor} />
+                }
+            }
+        },
+
+        Matchs : {
+            screen: MatchsStackNavigator,
+            navigationOptions: {
+                title: 'Matchs',
                 tabBarIcon: ({tintColor}) => {
                     return <FontAwesome name="futbol-o" size={20} color={tintColor} />
                 }

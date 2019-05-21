@@ -2,6 +2,8 @@ import React from 'react';
 import { } from 'react-native';
 import Navigation from './Navigation/Navigation'
 import { AppLoading } from 'expo';
+import moment from "moment/moment";
+import 'moment/locale/fr'
 import {Linking} from "react-native";
 import config from './config'
 
@@ -26,6 +28,8 @@ export default class App extends React.Component {
   }
 
   render() {
+
+    moment.locale('fr');
 
     if (this.state.loading) {
       return (
