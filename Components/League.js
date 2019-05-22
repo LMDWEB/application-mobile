@@ -1,7 +1,6 @@
 import React from 'react'
 import {View, Image, TouchableOpacity, Text, StyleSheet, Linking} from 'react-native'
 import { ListItem, Left, Body, Right, Thumbnail, Button, Icon} from 'native-base';
-import moment from "moment/moment";
 
 class League extends React.Component {
 
@@ -19,7 +18,7 @@ class League extends React.Component {
                 <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
                     <Image style={{width:35,height:35,marginRight: 5}} source={ (data.logo) ? { uri: data.logo} : require('../Images/team.png') } />
                     <Text style={{marginRight: 5}}>{data.name} </Text>
-                </View>
+                 </View>
             </TouchableOpacity>
         )
     }

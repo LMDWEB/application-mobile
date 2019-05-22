@@ -1,7 +1,5 @@
 import React from 'react'
 import {View, Image, TouchableOpacity, Text, ImageBackground, Dimensions, StyleSheet} from 'react-native'
-import card from '../Style/Match'
-import details from "../Style/Detail";
 
 class Match extends React.Component {
 
