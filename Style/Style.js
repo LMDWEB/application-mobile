@@ -24,6 +24,13 @@ export default StyleSheet.create({
         paddingBottom: 10
     },
 
+    main_third_container: {
+        flex:1,
+        paddingLeft: 10,
+        paddingBottom: 10,
+        backgroundColor: 'white',
+    },
+
     // Main Page
 
 

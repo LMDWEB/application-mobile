@@ -4,8 +4,7 @@ import Navigation from './Navigation/Navigation'
 import { AppLoading } from 'expo';
 import moment from "moment/moment";
 import 'moment/locale/fr'
-import {Linking} from "react-native";
-import config from './config'
+import { Root } from "native-base";
 
 export default class App extends React.Component {
 
@@ -40,7 +39,9 @@ export default class App extends React.Component {
     }
 
     return (
-        <Navigation/>
+        <Root>
+          <Navigation/>
+        </Root>
     );
   }
 }

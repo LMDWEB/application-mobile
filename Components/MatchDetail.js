@@ -1,10 +1,33 @@
 import React from 'react'
-import {View, ActivityIndicator, ScrollView, Image, ImageBackground, Share, Alert, TouchableOpacity, Linking, FlatList, NetInfo, StatusBar, Modal, Platform} from 'react-native'
-import { Container, Content, Text, Badge, Icon, Button } from 'native-base';
+import {
+    View,
+    ActivityIndicator,
+    ScrollView,
+    Image,
+    ImageBackground,
+    Share,
+    Alert,
+    TouchableOpacity,
+    Linking,
+    FlatList,
+    NetInfo,
+    StatusBar,
+    Modal,
+    Platform,
+    AsyncStorage
+} from 'react-native'
+import { Container, Content, Text, Badge, Icon, Button, Tabs, Tab, Header } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
+
+import {getMatch} from '../Api/Lmdfoot'
+
+import TabComment from '../Tabs/TabComments';
+import TabScore from '../Tabs/TabScore';
+
+import moment from "moment/moment";
 
 class MatchDetail extends React.Component {
 
@@ -21,17 +44,24 @@ class MatchDetail extends React.Component {
 
     _load () {
 
-        //const { id } = this.props.navigation.state.params;
+        const { id } = this.props.navigation.state.params;
 
         this.setState({ isLoading: true });
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    match: {},
-                    isLoading: false,
-                    isOnline: true
+
+                AsyncStorage.getItem("JWT").then((token) => {
+
+                    getMatch(1 , token).then(data => {
+                        this.setState({
+                            match: data,
+                            isLoading: false,
+                            isOnline: true
+                        });
+                    });
                 });
+
             } else {
                 this.setState({ isOnline: false, isLoading: false });
             }
@@ -103,20 +133,21 @@ class MatchDetail extends React.Component {
                                 <TouchableOpacity style={details.back} onPress={() => this.props.navigation.goBack()}>
                                     <FontAwesome name="arrow-left" size={20} color='white' />
                                 </TouchableOpacity>
-                                <Text style={details.title}> Detail</Text>
+                                <Text style={details.title}> {match.homeTeam.name} {match.goalsHomeTeam} - {match.goalsAwayTeam} {match.awayTeam.name} </Text>
                                 <Text style={details.year}> 2019 </Text>
-                                <Text style={details.time}> 20 equipes </Text>
+                                <Text style={details.time}> {match.league.name} </Text>
                                 <View style={details.hero_overflow} />
                                 <Image style={details.hero} source={ (movie.backdrop_path) ? { uri: movie.backdrop_path} : require('../Images/default.png') } />
                             </View>
-                            <View style={styles.main_container}>
-                                <Text style={styles.title}>Titre</Text>
-                                <View style={{alignItems: 'center'}}>
-                                    <Button primary iconLeft>
-                                        <FontAwesome style={{marginLeft: 10}} name="futbol-o" size={20} color={'white'} />
-                                        <Text>Action</Text>
-                                    </Button>
-                                </View>
+                            <View style={styles.main_third_container}>
+                                <Tabs>
+                                    <Tab heading="Commentaires">
+                                        <TabComment comments={match.comments} />
+                                    </Tab>
+                                    <Tab heading="Scores">
+                                        <TabScore />
+                                    </Tab>
+                                </Tabs>
                             </View>
                         </Content>
                     </ScrollView>
