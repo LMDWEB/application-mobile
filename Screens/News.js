@@ -3,9 +3,8 @@ import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity
 import styles from '../Style/Style'
 import { Container, Header, Title, Content, Left, Right, Body, Text, Button, Icon} from 'native-base';
 import Article from "../Components/Article"
-import news from "../Api/News"
+import {getNews} from "../Api/News"
 import { FontAwesome } from '@expo/vector-icons';
-import {Linking} from "expo";
 import config from '../config'
 
 class News extends React.Component {
@@ -32,12 +31,15 @@ class News extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    news: news,
-                    isLoading: false,
-                    isOnline: true,
-                    refreshing: false
+                getNews().then(data => {
+                    this.setState({
+                        news: data,
+                        isLoading: false,
+                        isOnline: true,
+                        refreshing: false
+                    });
                 });
+
             } else {
                 this.setState({ isOnline: false, isLoading: false });
             }

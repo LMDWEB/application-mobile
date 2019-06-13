@@ -1,11 +1,12 @@
 import React from 'react'
-import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform} from 'react-native'
-import { Container, Content, Text, Badge, Icon, Button } from 'native-base';
+import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform, FlatList} from 'react-native'
+import { Container, Content, Text, Badge, Icon, Button, Card, CardItem, Body } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
+import Player from '../Components/Player'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
-import article from '../Api/Article'
+import {getNewsDetail, getImageFromApi} from '../Api/News'
 import moment from "moment/moment";
 
 class NewsDetail extends React.Component {
@@ -24,17 +25,20 @@ class NewsDetail extends React.Component {
 
     _load () {
 
-        //const { id } = this.props.navigation.state.params;
+        const { id } = this.props.navigation.state.params;
 
         this.setState({ isLoading: true });
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    news: article,
-                    isLoading: false,
-                    isOnline: true
+                getNewsDetail(id).then(data => {
+                    this.setState({
+                        news: data,
+                        isLoading: false,
+                        isOnline: true,
+                    });
                 });
+
             } else {
                 this.setState({ isOnline: false, isLoading: false });
             }
@@ -78,29 +82,16 @@ class NewsDetail extends React.Component {
         }
     }
 
-
-    _displayDetail = (id) => {
-        this.props.navigation.push('Match', { id: id })
-    };
-
-    _displayNoResults () {
-        return (
-            <View style={details.no_result_container}>
-                <Text style={details.no_result_text}>Aucun resultat trouvé</Text>
-            </View>
-        );
-    };
-
     _displayResume() {
 
         const { news } = this.state;
 
-        if (news.resume) {
+        if (news.content) {
             return (
                 <View style={details.info_container}>
                         <TouchableOpacity onPress={() => this.setState({expandOverview:!this.state.expandOverview})}>
                             <Text numberOfLines={(this.state.expandOverview) ? null : 6} style={details.description}>
-                                {news.resume}
+                                {news.content}
                             </Text>
                         </TouchableOpacity>
                 </View>
@@ -108,11 +99,80 @@ class NewsDetail extends React.Component {
         }
     }
 
+    _displayPlayers () {
+
+        const { news } = this.state;
+
+        if (news.players.length == 0) {
+            return (
+                <Text style={{textAlign: 'center',fontWeight: 'bold', marginTop:10}}>Aucun joueurs</Text>
+            )
+        }
+
+        else if (news.players.length == 1) {
+            return (
+                <TouchableOpacity onPress={() => console.log("") }>
+                    <Card style={{marginRight:10}}>
+                        <CardItem cardBody>
+                            <Image source={ (news.players[0].image) ? { uri: getImageFromApi(news.players[0].image) } : require('../Images/player-default.png') } style={{height: 200, width: null, flex: 1, resizeMode: 'cover'}}/>
+                        </CardItem>
+                        <CardItem>
+                            <Body style={{alignItems: 'center'}}>
+                                <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>{news.players[0].name}</Text>
+                                <Text style={{fontWeight:'bold',color:'grey'}}>Numero {news.players[0].number}</Text>
+                            </Body>
+                        </CardItem>
+                    </Card>
+                </TouchableOpacity>
+            )
+        }
+
+        else {
+
+
+        }
+
+    }
+
+    _displayClubs () {
+
+        const { news } = this.state;
+
+        if (news.clubs.length == 0) {
+            return (
+                <Text style={{textAlign: 'center',fontWeight: 'bold', marginTop:10}}>Aucun joueurs</Text>
+            )
+        }
+
+        else if (news.clubs.length == 1) {
+            return (
+                <TouchableOpacity onPress={() => console.log("") }>
+                    <Card style={{marginRight:10}}>
+                        <CardItem cardBody style={{alignItems: 'center'}}>
+                            <Image source={ (news.clubs[0].logo) ? { uri: news.clubs[0].logo } : require('../Images/club-default.png') } style={{height: 100, width: 100}}/>
+                        </CardItem>
+                        <CardItem>
+                            <Body style={{alignItems: 'center'}}>
+                                <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>{news.clubs[0].name}</Text>
+                                <Text style={{fontWeight:'bold',color:'grey'}}>{news.clubs[0].country}</Text>
+                            </Body>
+                        </CardItem>
+                    </Card>
+                </TouchableOpacity>
+            )
+        }
+
+        else {
+
+
+        }
+
+    }
+
 
     _displayNews() {
 
         const { news } = this.state;
-        const movie = {};
 
         if (news != undefined && this.state.isOnline) {
 
@@ -128,11 +188,14 @@ class NewsDetail extends React.Component {
                                 <Text style={details.year}> { moment(news.date).format('DD MMMM YYYY') } </Text>
                                 <Text style={details.time}> {news.category.name} </Text>
                                 <View style={details.hero_overflow} />
-                                <Image style={details.hero} source={ (movie.backdrop_path) ? { uri: movie.backdrop_path} : require('../Images/default.png') } />
+                                <Image style={details.hero} source={ (news.image) ? { uri: getImageFromApi(news.image.url)} : require('../Images/default.png') } />
                             </View>
                             {this._displayResume()}
                             <View style={styles.main_container}>
-
+                                <Text style={styles.title}>Joueur{(news.players.length > 1) ? 's' : ''}</Text>
+                                {this._displayPlayers()}
+                                <Text style={styles.title}>Club{(news.clubs.length > 1) ? 's' : ''}</Text>
+                                {this._displayClubs()}
                             </View>
                         </Content>
                     </ScrollView>

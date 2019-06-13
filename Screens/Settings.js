@@ -42,7 +42,11 @@ class Settings extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left/>
+                    <Left>
+                        <Button transparent>
+                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
+                        </Button>
+                    </Left>
                     <Body>
                         <Title style={{color:'white'}}>Paramétres</Title>
                     </Body>
@@ -140,8 +144,11 @@ class Settings extends React.Component {
                             <Separator bordered>
                             </Separator>
                             <View style={{paddingVertical:20}}>
-                                <Text style={{textAlign:'center',fontWeight: 'bold',marginBottom:10}}>Version de l'application : 0.3</Text>
+                                <Text style={{textAlign:'center',fontWeight: 'bold',marginBottom:10}}>Version de l'application : 1.0</Text>
                                 <Text style={{textAlign:'center',fontWeight: 'bold'}}>© {(new Date()).getFullYear()} Sporty - Tous droits réservés</Text>
+                                <View style={{flexDirection: 'row',justifyContent:'space-evenly'}}>
+                                    <Image style={{marginTop:30,width:150,height:150}} source={ require('../assets/icon.png') } />
+                                </View>
                             </View>
                         </ScrollView>
                     </Content>

@@ -1,9 +1,7 @@
 import React from 'react'
-import { View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native'
-import moment from "moment/moment";
-import {getImageFromApi} from "../Api/News"
+import {View, Image, TouchableOpacity, Text, ImageBackground, Dimensions, StyleSheet} from 'react-native'
 
-class Article extends React.Component {
+class Player extends React.Component {
 
     constructor(props) {
         super(props);
@@ -11,14 +9,16 @@ class Article extends React.Component {
 
     render() {
 
-        const { data, displayDetail } = this.props;
+        const { data } = this.props;
 
         return (
-            <TouchableOpacity style={styles.container} onPress={() => displayDetail(data.id) }>
-                <Image style={styles.image} source={ (data.image) ? { uri: getImageFromApi(data.image.url) } : require('../Images/default-news.jpg') } />
-                <View style={styles.content_container}>
-                    <Text numberOfLines={2} style={styles.title_text}>{data.title}</Text>
-                    <Text numberOfLines={2} style={styles.description_text}>{moment(data.date).format('DD MMMM YYYY')} </Text>
+            <TouchableOpacity style={styles.container} onPress={() => console.log("r")}>
+                <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
+                    <Image style={{width:35,height:35,marginRight: 5}} source={ (data.image) ? { uri: data.image} : require('../Images/team.png') } />
+                    <Text style={{marginRight: 5}}>{data.homeTeam} </Text>
+                    <Text style={{fontWeight: 'bold',marginRight: 5}}> {data.goalsHomeTeam} - {data.goalsAwayTeam} </Text>
+                    <Image style={{width:35,height:35,marginRight: 5}} source={ (data.image) ? { uri: data.image} : require('../Images/team.png') } />
+                    <Text>{data.awayTeam} </Text>
                 </View>
             </TouchableOpacity>
         )
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
     image: {
         width: '100%',
-        height: 150,
+        height: 250,
         resizeMode:'cover'
     },
 
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Article
+export default Player

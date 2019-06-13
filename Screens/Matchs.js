@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
 import styles from '../Style/Style'
-import { Container, Header, Title, Content, Left, Right, Body, Text, Separator} from 'native-base';
+import {Container, Header, Title, Content, Left, Right, Body, Text, Separator, Button, Icon} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import Match from "../Components/Match";
@@ -123,7 +123,11 @@ class Matchs extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left/>
+                    <Left>
+                        <Button transparent>
+                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
+                        </Button>
+                    </Left>
                     <Body>
                         <Title style={{color:'white'}}>Matchs</Title>
                     </Body>

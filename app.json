@@ -74,7 +74,7 @@
         }
       },
       "splash": {
-        "backgroundColor": "#303a59",
+        "backgroundColor": "#ffffff",
         "resizeMode": "contain"
       }
     },

@@ -134,10 +134,10 @@ class MatchDetail extends React.Component {
                                     <FontAwesome name="arrow-left" size={20} color='white' />
                                 </TouchableOpacity>
                                 <Text style={details.title}> {match.homeTeam.name} {match.goalsHomeTeam} - {match.goalsAwayTeam} {match.awayTeam.name} </Text>
-                                <Text style={details.year}> 2019 </Text>
+                                <Text style={details.year}> {moment(match.eventBegin).format('DD MMMM YYYY à HH:mm')} </Text>
                                 <Text style={details.time}> {match.league.name} </Text>
                                 <View style={details.hero_overflow} />
-                                <Image style={details.hero} source={ (movie.backdrop_path) ? { uri: movie.backdrop_path} : require('../Images/default.png') } />
+                                <Image style={details.hero} source={ require('../Images/stadium.jpg') } />
                             </View>
                             <View style={styles.main_third_container}>
                                 <Tabs>

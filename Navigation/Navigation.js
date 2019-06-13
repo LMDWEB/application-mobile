@@ -137,7 +137,7 @@ const TabNavigator = createBottomTabNavigator({
 const AvatarComponent = (props) => (
  <SafeAreaView style={{flex:1}}>
      <View style={{height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'}}>
-         <Image source={require('../assets/avatar-default.jpg')} style={{height: 120, width: 120, borderRadius: 60}}/>
+         <Image source={require('../Images/avatar-default.jpg')} style={{height: 120, width: 120, borderRadius: 60}}/>
      </View>
      <ScrollView>
          <DrawerItems {...props}/>

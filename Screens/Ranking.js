@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
 import styles from '../Style/Style'
-import { Container, Header, Title, Content, Left, Right, Body, Text, List} from 'native-base';
+import {Container, Header, Title, Content, Left, Right, Body, Text, List, Button, Icon} from 'native-base';
 import League from "../Components/League"
 import sporty from "../Api/Sporty"
 import { FontAwesome } from '@expo/vector-icons';
@@ -109,7 +109,11 @@ class Ranking extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left/>
+                    <Left>
+                        <Button transparent>
+                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
+                        </Button>
+                    </Left>
                     <Body>
                         <Title style={{color:'white'}}>Classement</Title>
                     </Body>

@@ -1,8 +1,9 @@
 import React from 'react';
 import {AsyncStorage, View} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Icon,Thumbnail, Left, Body, Textarea, Form } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Text, Icon,Thumbnail, Left, Body, Textarea, Form, Button } from 'native-base';
 import moment from "moment/moment";
-import styles from '../Style/Style'
+import styles from '../Style/Style';
+import { FontAwesome } from '@expo/vector-icons';
 
 import {addCommentary} from '../Api/Lmdfoot'
 
@@ -35,11 +36,36 @@ class TabComments extends React.Component {
                 });
             });
         });
-
     }
 
     _handleComment (text) {
         this.comment = text;
+    }
+
+    _showCommentForm () {
+
+        AsyncStorage.getItem("JWT").then((token) => {
+
+            console.log('rr');
+            console.log(token);
+
+            if (token!= null) {
+
+                console.log("HEHEHE");
+
+                return (
+                    <View></View>
+                )
+            }
+            else {
+                return (
+                    <Button style={{marginTop: 15, paddingRight: 30, width: '100%',marginRight:10}} iconLeft primary onPress={() => this._searchNearsCinemas()}>
+                        <FontAwesome style={{paddingLeft: 15}} name='map-marker' size={30} color={'white'}/>
+                        <Text style={{fontSize: 13}}>Connecter-vous pour commenter les matchs</Text>
+                    </Button>
+                )
+            }
+        });
     }
 
     render(){
@@ -48,17 +74,19 @@ class TabComments extends React.Component {
 
         return(
             <View>
+                <View>
+                    <Text style={{textAlign: 'center',marginVertical: 20,fontSize:17, fontWeight: "bold"}}>Participer au match !!!</Text>
+                    <Form>
+                        <Textarea
+                            onChangeText={(text) => this._handleComment(text)}
+                            onSubmitEditing={() => this._addComment()}
+                            rowSpan={3}
+                            bordered
+                            placeholder="Ecrivez votre commentaire ..."
+                        />
+                    </Form>
+                </View>
                 <Text style={{textAlign: 'center',marginVertical: 20,fontSize:19, color:'red',fontWeight: "bold"}}>Decouvrez les moments forts du match !!!</Text>
-                <Form>
-                    <Textarea
-                        onChangeText={(text) => this._handleComment(text)}
-                        onSubmitEditing={() => this._addComment()}
-                        rowSpan={3}
-                        bordered
-                        placeholder="Ecrivez votre commentaire ..."
-                    />
-                </Form>
-                <Text style={styles.title}>{comments.length} commentaires</Text>
                 { (comments.length > 0) ?
                     comments.map(( comment, key ) =>
                         (
