@@ -4,7 +4,7 @@ import { createStackNavigator, createAppContainer, createBottomTabNavigator, cre
 import News from "../Screens/News";
 import NewsDetail from "../Components/NewsDetail";
 import Ranking from "../Screens/Ranking";
-import LeagueMatchs from "../Components/LeagueMatchs";
+import LeagueDetail from "../Components/LeagueDetail";
 import Matchs from "../Screens/Matchs";
 import MatchDetail from "../Components/MatchDetail";
 import Settings from "../Screens/Settings";
@@ -40,8 +40,8 @@ const RankingStackNavigator = createStackNavigator({
         navigationOptions: options
     },
 
-    LeagueMatchs : {
-        screen: LeagueMatchs,
+    LeagueDetail : {
+        screen: LeagueDetail,
         navigationOptions: options
     },
 
@@ -60,6 +60,10 @@ const MatchsStackNavigator = createStackNavigator({
 
     MatchDetail : {
         screen: MatchDetail,
+        navigationOptions: options
+    },
+    Login : {
+        screen: Login,
         navigationOptions: options
     }
 });
@@ -136,7 +140,7 @@ const TabNavigator = createBottomTabNavigator({
 
 const AvatarComponent = (props) => (
  <SafeAreaView style={{flex:1}}>
-     <View style={{height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'}}>
+     <View style={{height: 150, backgroundColor: '#303a59', alignItems: 'center', justifyContent: 'center'}}>
          <Image source={require('../Images/avatar-default.jpg')} style={{height: 120, width: 120, borderRadius: 60}}/>
      </View>
      <ScrollView>
@@ -151,20 +155,13 @@ const RegisterComponent = (props) => (
     </View>
 );
 
-const LogoutComponent = (props) => (
-    <View onPress={() => AsyncStorage.removeItem('JWT')}>
-        <Text style={{color:'red'}}>Deconnexion</Text>
-    </View>
-);
-
-const AuthenticateStack = createStackNavigator({ Home: NewsStackNavigator, Deconnexion: LogoutComponent });
-const DisconnectesStack = createStackNavigator({ Connexion: LogoutComponent, Inscription: RegisterComponent });
+const AuthenticateStack = createStackNavigator({ Home: NewsStackNavigator});
+const DisconnectesStack = createStackNavigator({ Connexion: Login, Inscription: RegisterComponent });
 
 const DrawerNavigator = createDrawerNavigator({
-   Home:TabNavigator,
+   Accueil:TabNavigator,
    Login: Login,
    Inscription: RegisterComponent,
-   Logout: LogoutComponent,
 }, {
         contentComponent: AvatarComponent
     });

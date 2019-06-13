@@ -39,7 +39,6 @@ class News extends React.Component {
                         refreshing: false
                     });
                 });
-
             } else {
                 this.setState({ isOnline: false, isLoading: false });
             }

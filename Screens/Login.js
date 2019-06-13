@@ -1,5 +1,16 @@
 import React from 'react'
-import {View, ScrollView, ActivityIndicator, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform, AsyncStorage} from 'react-native'
+import {
+    View,
+    ScrollView,
+    ActivityIndicator,
+    NetInfo,
+    TouchableOpacity,
+    RefreshControl,
+    StatusBar,
+    Platform,
+    AsyncStorage,
+    Image
+} from 'react-native'
 import styles from '../Style/Style'
 import { Container, Header, Title, Content, Left, Right, Body, Text, Item, Input, Form, Button, Icon, Toast} from 'native-base';
 import {login} from "../Api/Lmdfoot"
@@ -112,11 +123,7 @@ class Login extends React.Component {
 
                     }
                     else if (data.hasOwnProperty('token')) {
-
-                        console.log(data.token);
-
                         this._storeToken(data.token);
-
                         this.props.navigation.navigate('News')
                     }
                 });
@@ -125,17 +132,6 @@ class Login extends React.Component {
             }
         });
 
-    }
-
-    _loginResult () {
-
-        if (!this.state.login && this.login != '' && this.password != '') {
-            return (
-                <View>
-                    <Text>Login ou mot de passe incorrect</Text>
-                </View>
-            )
-        }
     }
 
     _handleLogin(text) {
@@ -150,7 +146,11 @@ class Login extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left/>
+                    <Left>
+                        <Button transparent>
+                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
+                        </Button>
+                    </Left>
                     <Body>
                         <Title style={{color:'white'}}>Connexion</Title>
                     </Body>
@@ -166,14 +166,20 @@ class Login extends React.Component {
                                         <Input autoCapitalize='none' placeholder='Login' onChangeText={(text) => this._handleLogin(text)}/>
                                     </Item>
                                     <Item style={{marginVertical: 10}} rounded>
-                                        <Input autoCapitalize='none' placeholder='Mot de passe' onChangeText={(text) => this._handlePassword(text)}/>
+                                        <Input secureTextEntry={true} autoCapitalize='none' placeholder='Mot de passe' onChangeText={(text) => this._handlePassword(text)}/>
                                     </Item>
                                     <Button iconLeft block onPress={ () => this._login()}>
-                                        <Icon name='arrow-back' />
+                                        <FontAwesome  name='user' size={25} color={'white'} />
                                         <Text>Se connecter</Text>
                                     </Button>
                                 </Form>
-
+                                <View style={{alignItems: 'center',marginTop: 50}}>
+                                    <Image style={{width:150,height:150}} source={ require('../Images/supporter.png') } />
+                                    <Text style={{marginTop:30,fontWeight: 'bold', fontSize:20}}>Soyez le 12 homme du match !!</Text>
+                                    <Text style={{marginTop:30,marginBottom: 10,fontSize:18}}>Commenter les matchs</Text>
+                                    <Text style={{marginTop:10,marginBottom: 10,fontSize:18}}>Faite le pronostic du score</Text>
+                                    <Text style={{marginTop:10,marginBottom: 10,fontSize:18}}>Particper à la communauté</Text>
+                                </View>
                             </View>
                         </ScrollView>
                         {this._displayLoading()}

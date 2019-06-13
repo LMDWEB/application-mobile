@@ -50,3 +50,55 @@ export function addCommentary (text, game_id, token) {
         .then((response) => response.json())
         .catch((error) => console.error(error));
 }
+
+export function getLastMatch (token) {
+    const url = API_URL + '/api/last_games';
+    return fetch(url , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+        }
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+}
+
+export function getLeagues (token) {
+    const url = API_URL + '/api/leagues';
+    return fetch(url , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+        }
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+}
+
+export function getLeaguesDetail (id, token) {
+    const url = API_URL + '/api/leagues/' + id;
+    return fetch(url , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+        }
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+}
+
+export function getLeaguesGames (league_id,round, token) {
+    const url = API_URL + '/api/leagues/' + league_id + '/games?round=' + round;
+    return fetch(url , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+        }
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+}

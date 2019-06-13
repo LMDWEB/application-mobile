@@ -50,10 +50,8 @@ class MatchDetail extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-
                 AsyncStorage.getItem("JWT").then((token) => {
-
-                    getMatch(1 , token).then(data => {
+                    getMatch(id , token).then(data => {
                         this.setState({
                             match: data,
                             isLoading: false,
@@ -61,7 +59,6 @@ class MatchDetail extends React.Component {
                         });
                     });
                 });
-
             } else {
                 this.setState({ isOnline: false, isLoading: false });
             }
@@ -139,7 +136,7 @@ class MatchDetail extends React.Component {
                                 <View style={details.hero_overflow} />
                                 <Image style={details.hero} source={ require('../Images/stadium.jpg') } />
                             </View>
-                            <View style={styles.main_third_container}>
+                            <View>
                                 <Tabs>
                                     <Tab heading="Commentaires">
                                         <TabComment comments={match.comments} />

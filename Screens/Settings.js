@@ -33,7 +33,7 @@ class Settings extends React.Component {
 
     _shareApplication() {
 
-        Share.share({ title: 'Viens découvrir l\'application PopCorn !!', message: 'Viens vite découvrir l\'application PopCorn, l\'application pour tout savoir sur les derniers film et series : https://popcorn.antonbourtnik.fr' })
+        Share.share({ title: 'Viens découvrir l\'application Sporty !!', message: 'Viens vite découvrir l\'application Sporty, l\'application qui te permter de devenir le 12 éme homme du match  : https://popcorn.antonbourtnik.fr' })
             .then(Alert.alert('Application partagée', null, [{text: 'OK', onPress: () => {}},]))
             .catch(error => Alert.alert('Application non partagée', error.message, [{text: 'OK', onPress: () => {}},]))
     }
@@ -74,19 +74,6 @@ class Settings extends React.Component {
                             <Separator bordered>
                                 <Text style={{fontSize:12}}>A PROPOS</Text>
                             </Separator>
-                            <ListItem icon onPress={() => Linking.openURL("market://details?id=com.antonbourtnik.popcorn")}>
-                                <Left>
-                                    <Button style={{ backgroundColor: "#FF9500" }}>
-                                        <FontAwesome active name="star" color={'white'} />
-                                    </Button>
-                                </Left>
-                                <Body>
-                                    <Text>Evaluer cette application</Text>
-                                </Body>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </ListItem>
                             <ListItem icon onPress={() => this._shareApplication()}>
                                 <Left>
                                     <Button style={{ backgroundColor: "#5854D6" }}>
@@ -139,8 +126,6 @@ class Settings extends React.Component {
                                     <Icon name="arrow-forward" />
                                 </Right>
                             </ListItem>
-                            <Separator bordered>
-                            </Separator>
                             <Separator bordered>
                             </Separator>
                             <View style={{paddingVertical:20}}>

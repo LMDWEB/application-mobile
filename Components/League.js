@@ -14,10 +14,9 @@ class League extends React.Component {
 
         return (
 
-            <TouchableOpacity style={styles.container} onPress={() => displayDetail(data.league_id)}>
+            <TouchableOpacity style={styles.container} onPress={() => displayDetail(data.id)}>
                 <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-                    <Image style={{width:35,height:35,marginRight: 5}} source={ (data.logo) ? { uri: data.logo} : require('../Images/team.png') } />
-                    <Text style={{marginRight: 5}}>{data.name} </Text>
+                    <Image style={{width:180,height:55,marginRight: 5}} source={ (data.logo) ? { uri: data.logo} : require('../Images/team.png') } />
                  </View>
             </TouchableOpacity>
         )

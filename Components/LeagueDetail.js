@@ -1,25 +1,66 @@
 import React from 'react'
-import {View, ActivityIndicator, ScrollView, Image, ImageBackground, Share, Alert, TouchableOpacity, Linking, FlatList, NetInfo, StatusBar, Modal, Platform} from 'react-native'
-import { Container, Content, Text, Badge, Icon } from 'native-base';
+import {
+    View,
+    ActivityIndicator,
+    ScrollView,
+    Image,
+    ImageBackground,
+    Share,
+    Alert,
+    TouchableOpacity,
+    Linking,
+    FlatList,
+    NetInfo,
+    StatusBar,
+    Modal,
+    Platform,
+    AsyncStorage
+} from 'react-native'
+import { Container, Content, Text, Badge, Icon,Picker,Item,Form } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
 import moment from 'moment'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
 import config from '../config';
-import matchs from '../Api/Matchs'
+import {getLeaguesDetail, getLeaguesGames} from "../Api/Lmdfoot";
 
-class LeagueMatchs extends React.Component {
+class LeagueDetail extends React.Component {
 
     constructor(props) {
 
         super(props);
 
         this.state = {
-            matchs : [],
+            league : undefined,
+            games : [],
+            round: 1,
             isLoading : true,
             isOnline: false
         };
+    }
+
+    _handleSelect(round) {
+
+        const { id } = this.props.navigation.state.params;
+
+        NetInfo.isConnected.fetch().then(isConnected => {
+            if (isConnected){
+                AsyncStorage.getItem("JWT").then((token) => {
+                    getLeaguesGames(id , round, token).then(data => {
+                        this.setState({
+                            round: round,
+                            games: data,
+                            isLoading: false,
+                            isOnline: true
+                        });
+                    });
+                });
+            } else {
+                this.setState({ isOnline: false, isLoading: false });
+            }
+        });
+
     }
 
     _load () {
@@ -30,10 +71,20 @@ class LeagueMatchs extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    matchs: matchs,
-                    isLoading: false,
-                    isOnline: true
+                AsyncStorage.getItem("JWT").then((token) => {
+                    Promise.all([
+                        getLeaguesDetail(id , token),
+                        getLeaguesGames(id , 1, token),
+                    ]).then(([league, games]) => {
+                        this.setState({
+                            league: league,
+                            games: games,
+                            isLoading: false,
+                            isOnline: true
+                        });
+                    }).catch(error => {
+                        console.log(error)
+                    });
                 });
             } else {
                 this.setState({ isOnline: false, isLoading: false });
@@ -93,10 +144,20 @@ class LeagueMatchs extends React.Component {
 
     _displayMatchs() {
 
-        const { matchs } = this.state;
-        const movie = {};
+        const { league, games } = this.state;
 
-        if (matchs.length > 0 && this.state.isOnline) {
+        let a = [];
+
+        for (var i=1; i <= 38; i++)
+            a.push(i);
+
+        let journeys = a.map(function(value, key){
+            return (
+                <Picker.Item key={value} label={"Journée " + value} value={value} />
+            );
+        });
+
+        if (league != undefined > 0 && this.state.isOnline) {
 
             return (
                 <Container>
@@ -106,19 +167,35 @@ class LeagueMatchs extends React.Component {
                                 <TouchableOpacity style={details.back} onPress={() => this.props.navigation.goBack()}>
                                     <FontAwesome name="arrow-left" size={20} color='white' />
                                 </TouchableOpacity>
-                                <Text style={details.title}> Ligue 1</Text>
-                                <Text style={details.year}> 2019 </Text>
-                                <Text style={details.time}> 20 equipes </Text>
+                                <Text style={details.title}> {league.name}</Text>
+                                <Text style={details.year}> {league.season} </Text>
+                                <Text style={details.time}> {league.country} </Text>
                                 <View style={details.hero_overflow} />
-                                <Image style={details.hero} source={ (movie.backdrop_path) ? { uri: movie.backdrop_path} : require('../Images/default.png') } />
+                                <Image style={details.hero} source={ (league.logo) ? { uri: league.logo} : require('../Images/default.png') } />
                             </View>
                             <View style={{flex:1, backgroundColor: config.background_color}}>
+                                <Form>
+                                    <Item picker>
+                                        <Picker
+                                            mode="dropdown"
+                                            iosIcon={<Icon name="arrow-down" />}
+                                            style={{ width: undefined,backgroundColor:'white' }}
+                                            placeholder="Selectionner la journeé"
+                                            placeholderStyle={{ color: "black" }}
+                                            placeholderIconColor="#007aff"
+                                            selectedValue={this.state.round}
+                                            onValueChange={this._handleSelect.bind(this)}
+                                        >
+                                        {journeys}
+                                        </Picker>
+                                    </Item>
+                                </Form>
                                 <Text style={styles.title}>Matchs</Text>
-                                <View style={{alignItems: 'center'}}>
+                                <View style={{paddingHorizontal: 10}}>
                                     <ScrollView>
                                         <FlatList
-                                            data={matchs}
-                                            keyExtractor={(item) => item.fixture_id}
+                                            data={games}
+                                            keyExtractor={(item) => item.id.toString()}
                                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                                             ListEmptyComponent={this._displayNoResults}
                                         />
@@ -144,4 +221,4 @@ class LeagueMatchs extends React.Component {
     }
 }
 
-export default LeagueMatchs
+export default LeagueDetail

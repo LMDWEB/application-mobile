@@ -1,11 +1,22 @@
 import React from 'react'
-import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
+import {
+    View,
+    ScrollView,
+    ActivityIndicator,
+    FlatList,
+    NetInfo,
+    TouchableOpacity,
+    RefreshControl,
+    StatusBar,
+    Platform,
+    AsyncStorage
+} from 'react-native'
 import styles from '../Style/Style'
 import {Container, Header, Title, Content, Left, Right, Body, Text, Separator, Button, Icon} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import Match from "../Components/Match";
-import matchs from '../Api/Matchs'
+import {getLastMatch} from '../Api/Lmdfoot'
 
 class Matchs extends React.Component {
 
@@ -33,13 +44,17 @@ class Matchs extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    matchOnline: matchs,
-                    matchsEnded: matchs,
-                    matchsFuture: matchs,
-                    isLoading: false,
-                    isOnline: true,
-                    refreshing: false
+                AsyncStorage.getItem("JWT").then((token) => {
+                    getLastMatch(token).then(data => {
+                        this.setState({
+                            matchsOnline: data,
+                            matchsEnded: data,
+                            matchsFuture: data,
+                            isLoading: false,
+                            isOnline: true,
+                            refreshing: false
+                        });
+                    });
                 });
             } else {
                 this.setState({ isOnline: false, isLoading: false });
@@ -91,26 +106,27 @@ class Matchs extends React.Component {
     };
 
     _displayMatchs () {
+
         if (this.state.isOnline && !this.state.isLoading) {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
                         <Text style={styles.title}>Match en cours</Text>
                         <FlatList
-                            data={matchs.slice(0,4)}
-                            keyExtractor={(item) => item.fixture_id}
+                            data={this.state.matchsOnline}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
                         <Text style={styles.title}>Match terminé</Text>
                         <FlatList
-                            data={matchs.slice(2,5)}
-                            keyExtractor={(item) => item.fixture_id}
+                            data={this.state.matchsEnded}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
                         <Text style={styles.title}>Match à venir</Text>
                         <FlatList
-                            data={matchs.slice(2,6)}
-                            keyExtractor={(item) => item.fixture_id}
+                            data={this.state.matchsFuture}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
                     </View>

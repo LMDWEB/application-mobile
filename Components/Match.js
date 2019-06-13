@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Image, TouchableOpacity, Text, ImageBackground, Dimensions, StyleSheet} from 'react-native'
+import {View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native'
 
 class Match extends React.Component {
 
@@ -12,13 +12,13 @@ class Match extends React.Component {
         const { data, displayDetail } = this.props;
 
         return (
-                <TouchableOpacity style={styles.container} onPress={() => displayDetail(data.fixture_id)}>
+                <TouchableOpacity style={styles.container} onPress={() => displayDetail(data.id)}>
                     <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-                        <Text style={{marginRight: 5}}>{data.homeTeam} </Text>
-                        <Image style={{width:35,height:35,marginRight: 5}} source={ (data.image) ? { uri: data.image} : require('../Images/team.png') } />
+                        <Text style={{marginRight: 5}}>{data.homeTeam.name} </Text>
+                        <Image style={{width:35,height:35,marginRight: 5}} source={ (data.homeTeamLogo) ? { uri: data.homeTeamLogo} : require('../Images/team.png') } />
                         <Text style={{fontWeight: 'bold',marginRight: 5}}> {data.goalsHomeTeam} - {data.goalsAwayTeam} </Text>
-                        <Image style={{width:35,height:35,marginRight: 5}} source={ (data.image) ? { uri: data.image} : require('../Images/team.png') } />
-                        <Text>{data.awayTeam} </Text>
+                        <Image style={{width:35,height:35,marginRight: 5}} source={ (data.awayTeamLogo) ? { uri: data.awayTeamLogo} : require('../Images/team.png') } />
+                        <Text>{data.awayTeam.name} </Text>
                     </View>
                 </TouchableOpacity>
         )

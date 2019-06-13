@@ -1,13 +1,22 @@
 import React from 'react'
-import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
+import {
+    View,
+    ScrollView,
+    ActivityIndicator,
+    FlatList,
+    NetInfo,
+    TouchableOpacity,
+    RefreshControl,
+    StatusBar,
+    Platform,
+    AsyncStorage
+} from 'react-native'
 import styles from '../Style/Style'
 import {Container, Header, Title, Content, Left, Right, Body, Text, List, Button, Icon} from 'native-base';
 import League from "../Components/League"
-import sporty from "../Api/Sporty"
+import {getLeagues} from "../Api/Lmdfoot"
 import { FontAwesome } from '@expo/vector-icons';
-import {Linking} from "expo";
 import config from '../config'
-import Article from "../Components/Article";
 
 class Ranking extends React.Component {
 
@@ -33,11 +42,17 @@ class Ranking extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    leagues : sporty,
-                    isLoading: false,
-                    isOnline: true,
-                    refreshing: false
+
+                AsyncStorage.getItem("JWT").then((token) => {
+
+                    getLeagues(token).then(data => {
+                        this.setState({
+                            leagues : data,
+                            isLoading: false,
+                            isOnline: true,
+                            refreshing: false
+                        });
+                    });
                 });
             } else {
                 this.setState({ isOnline: false, isLoading: false });
@@ -85,7 +100,7 @@ class Ranking extends React.Component {
     }
 
     _displayDetail = (id) => {
-        this.props.navigation.navigate('LeagueMatchs', { id: id })
+        this.props.navigation.navigate('LeagueDetail', { id: id })
     };
 
     _displayLeagues () {
@@ -96,7 +111,7 @@ class Ranking extends React.Component {
                         <Text style={styles.title}>Compétitions</Text>
                         <FlatList
                             data={this.state.leagues}
-                            keyExtractor={(item) => item.league_id.toString()}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <League data={item} displayDetail={this._displayDetail}></League>}
                         />
                     </View>
