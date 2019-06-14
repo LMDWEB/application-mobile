@@ -72,13 +72,8 @@ class Login extends React.Component {
     }
 
     _displayLoading() {
-        if (this.state.isLoading) {
-            return (
-                <View style={{alignItems: 'center',marginTop:45}}>
-                    <ActivityIndicator size='large' />
-                </View>
-            )
-        }
+        if (this.state.isLoading) return (<ActivityIndicator size='large' />)
+        else return (<FontAwesome  name='user' size={25} color={'white'} />)
     }
 
 
@@ -96,10 +91,6 @@ class Login extends React.Component {
             )
         }
     }
-
-    _displayDetail = (id) => {
-        this.props.navigation.navigate('NewsDetail', { id: id })
-    };
 
     _login () {
 
@@ -125,6 +116,13 @@ class Login extends React.Component {
                     else if (data.hasOwnProperty('token')) {
                         this._storeToken(data.token);
                         this.props.navigation.navigate('News')
+
+                        Toast.show({
+                            text: 'Vous êtes connecté',
+                            type: 'success',
+                            duration: 3000
+                        });
+
                     }
                 });
             }else {
@@ -169,7 +167,7 @@ class Login extends React.Component {
                                         <Input secureTextEntry={true} autoCapitalize='none' placeholder='Mot de passe' onChangeText={(text) => this._handlePassword(text)}/>
                                     </Item>
                                     <Button iconLeft block onPress={ () => this._login()}>
-                                        <FontAwesome  name='user' size={25} color={'white'} />
+                                        {this._displayLoading()}
                                         <Text>Se connecter</Text>
                                     </Button>
                                 </Form>
@@ -182,7 +180,6 @@ class Login extends React.Component {
                                 </View>
                             </View>
                         </ScrollView>
-                        {this._displayLoading()}
                         {this._displayOffline()}
                     </Content>
                 </View>

@@ -24,7 +24,7 @@ import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
 
-import {addScore} from '../Api/Lmdfoot'
+import {addScore,getBestScore} from '../Api/Lmdfoot'
 
 class TabScore extends React.Component {
 
@@ -34,6 +34,7 @@ class TabScore extends React.Component {
         this.state = {
             scoreHomeTeam:undefined,
             scoreAwayTeam:undefined,
+            bestScore: undefined,
             connected : false,
             isLoading : true,
             isOnline: false
@@ -41,9 +42,23 @@ class TabScore extends React.Component {
     }
 
     componentDidMount() {
-        this._retrieveData();
-    }
 
+        const { match } = this.props;
+
+        this._retrieveData();
+
+        AsyncStorage.getItem("JWT").then((token) => {
+
+            getBestScore(match.id, token).then(data => {
+                console.log(data);
+                this.setState({
+                    bestScore:data,
+                    isLoading: false,
+                    isOnline: true
+                });
+            });
+        });
+    }
 
     _retrieveData = async () => {
         try {
@@ -197,10 +212,20 @@ class TabScore extends React.Component {
                         <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
                             <Text style={{marginRight: 5}}>{match.homeTeam.name} </Text>
                             <Image style={{width:35,height:35,marginRight: 5}} source={ (match.homeTeam.logo) ? { uri: match.homeTeam.logo} : require('../Images/team.png') } />
-                            <Text style={{fontWeight: 'bold',marginRight: 5}}> {match.goalsHomeTeam} - {match.goalsAwayTeam} </Text>
+                            <Text style={{fontWeight: 'bold',marginRight: 5}}> {(this.state.bestScore) ? this.state.bestScore.scoreHomeTeam : ' ' } - {(this.state.bestScore) ? this.state.bestScore.scoreAwayTeam : ' ' } </Text>
                             <Image style={{width:35,height:35,marginRight: 5}} source={ (match.awayTeam.logo) ? { uri: match.awayTeam.logo} : require('../Images/team.png') } />
                             <Text>{match.awayTeam.name} </Text>
                         </View>
+                    </View>
+                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                        <Button style={{flex:1,marginRight:5}} disabled small block info iconLeft>
+                            <FontAwesome style={{marginLeft: 7}} name='futbol-o' size={18} color={'white'} />
+                            <Text numberOfLines={1}>Précision : {(this.state.bestScore) ? this.state.bestScore.accuracy : 0 } %</Text>
+                        </Button>
+                        <Button style={{flex:1,marginLeft:5}} disabled small block warning iconLeft>
+                            <FontAwesome style={{marginLeft: 7}} name='user' size={18} color={'white'} />
+                            <Text numberOfLines={1}>Contributeurs : {(this.state.bestScore) ? this.state.bestScore.contributors : 0 }</Text>
+                        </Button>
                     </View>
                     <Text style={styles.title}>Votre score</Text>
                     <View style={styles.card_container}>
