@@ -83,6 +83,20 @@ export default StyleSheet.create({
         marginTop:30,
         borderWidth: 1,
         padding:8
-    }
+    },
+
+    card_container: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 2,
+        marginRight: 6,
+        backgroundColor:'#fff',
+        marginBottom: 8,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1.5,
+        elevation: 3
+    },
 
 });

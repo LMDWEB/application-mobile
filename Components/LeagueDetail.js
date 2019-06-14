@@ -179,7 +179,7 @@ class LeagueDetail extends React.Component {
                                         <Picker
                                             mode="dropdown"
                                             iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined,backgroundColor:'white' }}
+                                            style={{ width: undefined,backgroundColor:'white'}}
                                             placeholder="Selectionner la journeé"
                                             placeholderStyle={{ color: "black" }}
                                             placeholderIconColor="#007aff"

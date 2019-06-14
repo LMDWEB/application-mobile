@@ -1,6 +1,24 @@
 import React from 'react';
 import {AsyncStorage, Platform, StatusBar, View} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Icon,Thumbnail, Left, Body, Textarea, Form, Button, Right, Item, Input } from 'native-base';
+import {
+    Container,
+    Header,
+    Content,
+    Card,
+    CardItem,
+    Text,
+    Icon,
+    Thumbnail,
+    Left,
+    Body,
+    Textarea,
+    Form,
+    Button,
+    Right,
+    Item,
+    Input,
+    Toast
+} from 'native-base';
 import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,10 +30,9 @@ class TabComments extends React.Component {
     constructor(props) {
         super(props);
 
-        this.comment = '';
-
         this.state = {
-            comments : [],
+            comment : '',
+            comments : this.props.comments,
             connected : false,
             isLoading : true,
             isOnline: false
@@ -28,28 +45,36 @@ class TabComments extends React.Component {
 
     _addComment () {
 
-        AsyncStorage.getItem("JWT").then((token) => {
+        if (this.state.comment.length > 0) {
+            AsyncStorage.getItem("JWT").then((token) => {
 
-            addCommentary(this.comment, 1, token).then(data => {
+                addCommentary(this.state.comment, this.props.match_id, token).then(data => {
 
-                console.log(data);
+                    this.setState({
+                        comment : '',
+                        comments: [ ...[data], ...this.state.comments ],
+                        isLoading: false,
+                        isOnline: true
+                    });
 
-                this.setState({
-                    comments: data,
-                    isLoading: false,
-                    isOnline: true
+                    Toast.show({
+                        text: 'Commentaire ajouté',
+                        type: 'success',
+                        duration: 3000
+                    });
+
                 });
             });
-        });
+        }
     }
 
     _handleComment (text) {
-        this.comment = text;
+        this.setState({comment: text});
     }
 
     _retrieveData = async () => {
         try {
-            const value = await AsyncStorage.getItem('JWT2');
+            const value = await AsyncStorage.getItem('JWT');
             if (value !== null) {
                 this.setState({ connected: true})
             }
@@ -68,8 +93,11 @@ class TabComments extends React.Component {
                             <Item rounded style={{borderColor:'black',borderWidth: 1}}>
                                 <Input
                                     onChangeText={(text) => this._handleComment(text)}
+                                    onSubmitEditing={() => this._addComment()}
                                     placeholder="Ecrivez votre commentaire ..."
                                     placeholderTextColor={'#303a59'}
+                                    value={this.state.comment}
+                                    autoCorrect={false}
                                 />
                                 <Icon onPress={() => this._addComment()} style={{marginRight: 10}} active name='send' />
                             </Item>
@@ -89,7 +117,7 @@ class TabComments extends React.Component {
 
     render(){
 
-        const { comments } = this.props;
+        const { comments } = this.state;
 
         return(
             <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
@@ -114,7 +142,7 @@ class TabComments extends React.Component {
                         )) :
                     <View style={{alignItems: 'center'}}>
                         <Text style={styles.offline_text}>Aucun commentaire </Text>
-                        <FontAwesome  name='signal' size={70} color={'grey'} />
+                        <FontAwesome  name='comments' size={70} color={'grey'} />
                     </View>
                 }
 

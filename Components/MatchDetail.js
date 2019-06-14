@@ -139,10 +139,10 @@ class MatchDetail extends React.Component {
                             <View>
                                 <Tabs>
                                     <Tab heading="Commentaires">
-                                        <TabComment comments={match.comments} />
+                                        <TabComment match_id={match.id} comments={match.comments} />
                                     </Tab>
                                     <Tab heading="Scores">
-                                        <TabScore />
+                                        <TabScore match={match} />
                                     </Tab>
                                 </Tabs>
                             </View>

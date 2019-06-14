@@ -12,11 +12,11 @@ import {
     AsyncStorage
 } from 'react-native'
 import styles from '../Style/Style'
-import {Container, Header, Title, Content, Left, Right, Body, Text, Separator, Button, Icon} from 'native-base';
+import {Container, Header, Title, Content, Left, Right, Body, Text, Button, Icon} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import Match from "../Components/Match";
-import {getLastMatch} from '../Api/Lmdfoot'
+import {getLastGames, getCurrentGames, getNextGames} from '../Api/Lmdfoot'
 
 class Matchs extends React.Component {
 
@@ -24,9 +24,9 @@ class Matchs extends React.Component {
         super(props);
 
         this.state = {
-            matchsOnline: [],
-            matchsEnded: [],
-            matchsFuture: [],
+            lastGames: [],
+            currentGames: [],
+            nextGames: [],
             isOnline: true,
             isLoading : false,
             refreshing: false,
@@ -45,11 +45,15 @@ class Matchs extends React.Component {
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
                 AsyncStorage.getItem("JWT").then((token) => {
-                    getLastMatch(token).then(data => {
+                    Promise.all([
+                        getLastGames(token),
+                        getCurrentGames(token),
+                        getNextGames(token)
+                    ]).then(([lastGames, currentGames, nextGames]) => {
                         this.setState({
-                            matchsOnline: data,
-                            matchsEnded: data,
-                            matchsFuture: data,
+                            lastGames: lastGames,
+                            currentGames: currentGames,
+                            nextGames: nextGames,
                             isLoading: false,
                             isOnline: true,
                             refreshing: false
@@ -107,25 +111,27 @@ class Matchs extends React.Component {
 
     _displayMatchs () {
 
+        const { lastGames, currentGames, nextGames } = this.state;
+
         if (this.state.isOnline && !this.state.isLoading) {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
                         <Text style={styles.title}>Match en cours</Text>
                         <FlatList
-                            data={this.state.matchsOnline}
+                            data={currentGames}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
                         <Text style={styles.title}>Match terminé</Text>
                         <FlatList
-                            data={this.state.matchsEnded}
+                            data={lastGames}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
                         <Text style={styles.title}>Match à venir</Text>
                         <FlatList
-                            data={this.state.matchsFuture}
+                            data={nextGames}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />

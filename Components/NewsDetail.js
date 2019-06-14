@@ -188,7 +188,7 @@ class NewsDetail extends React.Component {
                                 <Text style={details.year}> { moment(news.date).format('DD MMMM YYYY') } </Text>
                                 <Text style={details.time}> {news.category.name} </Text>
                                 <View style={details.hero_overflow} />
-                                <Image style={details.hero} source={ (news.image) ? { uri: getImageFromApi(news.image.url)} : require('../Images/default.png') } />
+                                <Image style={details.hero} source={ (news.image) ? { uri: getImageFromApi(news.image.url)} : require('../Images/default-news.jpg') } />
                             </View>
                             {this._displayResume()}
                             <View style={styles.main_container}>
