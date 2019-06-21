@@ -5,4 +5,6 @@ export default config = {
 
     api_key_sporty: '',
     api_key_strapi: '',
+
+    admin_jwt: ''
 }

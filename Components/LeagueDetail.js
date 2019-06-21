@@ -46,14 +46,12 @@ class LeagueDetail extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                AsyncStorage.getItem("JWT").then((token) => {
-                    getLeaguesGames(id , round, token).then(data => {
-                        this.setState({
-                            round: round,
-                            games: data,
-                            isLoading: false,
-                            isOnline: true
-                        });
+                getLeaguesGames(id , round, config.admin_jwt).then(data => {
+                    this.setState({
+                        round: round,
+                        games: data,
+                        isLoading: false,
+                        isOnline: true
                     });
                 });
             } else {
@@ -71,20 +69,18 @@ class LeagueDetail extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                AsyncStorage.getItem("JWT").then((token) => {
-                    Promise.all([
-                        getLeaguesDetail(id , token),
-                        getLeaguesGames(id , 1, token),
-                    ]).then(([league, games]) => {
-                        this.setState({
-                            league: league,
-                            games: games,
-                            isLoading: false,
-                            isOnline: true
-                        });
-                    }).catch(error => {
-                        console.log(error)
+                Promise.all([
+                    getLeaguesDetail(id , config.admin_jwt),
+                    getLeaguesGames(id , 1, config.admin_jwt),
+                ]).then(([league, games]) => {
+                    this.setState({
+                        league: league,
+                        games: games,
+                        isLoading: false,
+                        isOnline: true
                     });
+                }).catch(error => {
+                    console.log(error)
                 });
             } else {
                 this.setState({ isOnline: false, isLoading: false });

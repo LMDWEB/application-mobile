@@ -23,6 +23,8 @@ import {
 import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
+import config from '../config'
+import { withNavigation } from 'react-navigation';
 
 import {addScore,getBestScore} from '../Api/Lmdfoot'
 
@@ -47,15 +49,11 @@ class TabScore extends React.Component {
 
         this._retrieveData();
 
-        AsyncStorage.getItem("JWT").then((token) => {
-
-            getBestScore(match.id, token).then(data => {
-                console.log(data);
-                this.setState({
-                    bestScore:data,
-                    isLoading: false,
-                    isOnline: true
-                });
+        getBestScore(match.id, config.admin_jwt).then(data => {
+            this.setState({
+                bestScore:data,
+                isLoading: false,
+                isOnline: true
             });
         });
     }
@@ -118,25 +116,48 @@ class TabScore extends React.Component {
         }
     }
 
-    _showCommentForm () {
+    _showScoreForm () {
 
         if (this.state.connected) {
             return (
                 <View>
-                    <Text style={{textAlign: 'center',marginVertical: 20,fontSize:17, fontWeight: "bold"}}>Participer au match !!!</Text>
-                    <Form>
-                        <Item rounded style={{borderColor:'black',borderWidth: 1}}>
-                            <Input
-                                onChangeText={(text) => this._handleComment(text)}
-                                onSubmitEditing={() => this._addComment()}
-                                placeholder="Ecrivez votre commentaire ..."
-                                placeholderTextColor={'#303a59'}
-                                value={this.state.comment}
-                                autoCorrect={false}
-                            />
-                            <Icon onPress={() => this._addComment()} style={{marginRight: 10}} active name='send' />
+                    <Text style={styles.title}>Entrez votre score</Text>
+                    <Form style={{flexDirection: 'row',justifyContent:'space-evenly',paddingHorizontal: 10}}>
+                        <Item picker style={{flex:1}}>
+                            <Picker
+                                mode="dropdown"
+                                iosIcon={<Icon name="arrow-down" />}
+                                style={{ width: undefined,backgroundColor:'white'}}
+                                placeholder={"Score " + match.homeTeam.name}
+                                placeholderStyle={{ color: "black" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.scoreHomeTeam}
+                                onValueChange={this._handleSelectHomeTeam.bind(this)}
+                            >
+                                {scores}
+                            </Picker>
+                        </Item>
+                        <Item picker style={{flex:1}}>
+                            <Picker
+                                mode="dropdown"
+                                iosIcon={<Icon name="arrow-down" />}
+                                style={{ width: undefined }}
+                                placeholder={"Score " + match.awayTeam.name}
+                                placeholderStyle={{ color: "black" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.scoreAwayTeam}
+                                onValueChange={this._handleSelectAwayTeam.bind(this)}
+                            >
+                                {scores}
+                            </Picker>
                         </Item>
                     </Form>
+                    <Button style={{paddingHorizontal:10}} iconLeft primary block onPress={() => this._addScore(this.state.scoreHomeTeam,this.state.scoreAwayTeam)}>
+                        <FontAwesome style={{paddingLeft: 15}} name='futbol-o' size={30} color={'white'}/>
+                        <Text style={{fontSize: 13}}>Envoyer le score</Text>
+                    </Button>
+                    <Separator bordered>
+                    </Separator>
                 </View>
             )
         }
@@ -168,44 +189,8 @@ class TabScore extends React.Component {
         });
 
         return(
-            <View style={{backgroundColor:'#F6F6F6'}} >
-                <Text style={styles.title}>Entrez votre score</Text>
-                <Form style={{flexDirection: 'row',justifyContent:'space-evenly',paddingHorizontal: 10}}>
-                    <Item picker style={{flex:1}}>
-                        <Picker
-                            mode="dropdown"
-                            iosIcon={<Icon name="arrow-down" />}
-                            style={{ width: undefined,backgroundColor:'white'}}
-                            placeholder={"Score " + match.homeTeam.name}
-                            placeholderStyle={{ color: "black" }}
-                            placeholderIconColor="#007aff"
-                            selectedValue={this.state.scoreHomeTeam}
-                            onValueChange={this._handleSelectHomeTeam.bind(this)}
-                        >
-                            {scores}
-                        </Picker>
-                    </Item>
-                    <Item picker style={{flex:1}}>
-                        <Picker
-                            mode="dropdown"
-                            iosIcon={<Icon name="arrow-down" />}
-                            style={{ width: undefined }}
-                            placeholder={"Score " + match.awayTeam.name}
-                            placeholderStyle={{ color: "black" }}
-                            placeholderIconColor="#007aff"
-                            selectedValue={this.state.scoreAwayTeam}
-                            onValueChange={this._handleSelectAwayTeam.bind(this)}
-                        >
-                            {scores}
-                        </Picker>
-                    </Item>
-                </Form>
-                <Button style={{paddingHorizontal:10}} iconLeft primary block onPress={() => this._addScore(this.state.scoreHomeTeam,this.state.scoreAwayTeam)}>
-                    <FontAwesome style={{paddingLeft: 15}} name='futbol-o' size={30} color={'white'}/>
-                    <Text style={{fontSize: 13}}>Envoyer le score</Text>
-                </Button>
-                <Separator bordered>
-                </Separator>
+            <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
+                {this._showScoreForm()}
                 <View style={{paddingHorizontal: 10}}>
                     <Text style={styles.title}>Score Moyen</Text>
                     <View style={styles.card_container}>
@@ -243,4 +228,4 @@ class TabScore extends React.Component {
     }
 }
 
-export default TabScore
+export default withNavigation(TabScore)

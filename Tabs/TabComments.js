@@ -22,8 +22,9 @@ import {
 import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
-
-import {addCommentary} from '../Api/Lmdfoot'
+import {addCommentary} from '../Api/Lmdfoot';
+import config from '../config';
+import { withNavigation } from 'react-navigation';
 
 class TabComments extends React.Component {
 
@@ -152,4 +153,4 @@ class TabComments extends React.Component {
     }
 }
 
-export default TabComments
+export default withNavigation(TabComments)

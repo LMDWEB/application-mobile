@@ -21,6 +21,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
+import config from '../config'
 
 import {getMatch} from '../Api/Lmdfoot'
 
@@ -50,13 +51,11 @@ class MatchDetail extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                AsyncStorage.getItem("JWT").then((token) => {
-                    getMatch(id , token).then(data => {
-                        this.setState({
-                            match: data,
-                            isLoading: false,
-                            isOnline: true
-                        });
+                getMatch(id , config.admin_jwt).then(data => {
+                    this.setState({
+                        match: data,
+                        isLoading: false,
+                        isOnline: true
                     });
                 });
             } else {

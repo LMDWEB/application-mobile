@@ -42,16 +42,12 @@ class Ranking extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-
-                AsyncStorage.getItem("JWT").then((token) => {
-
-                    getLeagues(token).then(data => {
-                        this.setState({
-                            leagues : data,
-                            isLoading: false,
-                            isOnline: true,
-                            refreshing: false
-                        });
+                getLeagues(config.admin_jwt).then(data => {
+                    this.setState({
+                        leagues : data,
+                        isLoading: false,
+                        isOnline: true,
+                        refreshing: false
                     });
                 });
             } else {

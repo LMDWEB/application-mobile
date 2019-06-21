@@ -44,20 +44,18 @@ class Matchs extends React.Component {
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                AsyncStorage.getItem("JWT").then((token) => {
-                    Promise.all([
-                        getLastGames(token),
-                        getCurrentGames(token),
-                        getNextGames(token)
-                    ]).then(([lastGames, currentGames, nextGames]) => {
-                        this.setState({
-                            lastGames: lastGames,
-                            currentGames: currentGames,
-                            nextGames: nextGames,
-                            isLoading: false,
-                            isOnline: true,
-                            refreshing: false
-                        });
+                Promise.all([
+                    getLastGames(config.admin_jwt),
+                    getCurrentGames(config.admin_jwt),
+                    getNextGames(config.admin_jwt)
+                ]).then(([lastGames, currentGames, nextGames]) => {
+                    this.setState({
+                        lastGames: lastGames,
+                        currentGames: currentGames,
+                        nextGames: nextGames,
+                        isLoading: false,
+                        isOnline: true,
+                        refreshing: false
                     });
                 });
             } else {
