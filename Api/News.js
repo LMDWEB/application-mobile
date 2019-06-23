@@ -4,7 +4,7 @@ const API_TOKEN = '';
 const API_URL = 'https://api.news.lmdfoot.com';
 
 export function getNews () {
-    const url = API_URL + '/articles?_sort=date:DESC';
+    const url = API_URL + '/articles?_sort=date:DESC&status=Published';
     return fetch(url)
         .then((response) => response.json())
         .catch((error) => console.error(error));

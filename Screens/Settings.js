@@ -1,10 +1,26 @@
 import React from 'react'
-import {View, Linking, Share, Alert, ScrollView, Image, StatusBar, Platform} from 'react-native'
-import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Text, ListItem, Separator, Switch } from 'native-base';
+import {View, Linking, Share, Alert, ScrollView, Image, StatusBar, Platform, AsyncStorage, NetInfo} from 'react-native'
+import {
+    Container,
+    Header,
+    Title,
+    Content,
+    Button,
+    Left,
+    Right,
+    Body,
+    Icon,
+    Text,
+    ListItem,
+    Separator,
+    Switch,
+    Toast
+} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import { Constants, WebBrowser } from 'expo'
 import styles from "../Style/Style";
 import config from '../config'
+import {getUser, login} from '../Api/Lmdfoot'
 
 class Settings extends React.Component {
 
@@ -12,15 +28,34 @@ class Settings extends React.Component {
         super(props);
 
         this.state = {
-            notification:true
+            notification:true,
+            connected : false,
+            username: '',
+            isLoading : false
         }
     }
+
+    _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('JWT');
+            if (value !== null) {
+                getUser(value).then(data => {
+                    this.setState({ connected: true, username:data.name})
+                });
+            }
+            else this.setState({ connected: false});
+        } catch (error) {
+            // Error retrieving data
+        }
+    };
 
     componentDidMount() {
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             (Platform.OS === 'android') ? StatusBar.setTranslucent(false) : null;
             (Platform.OS === 'android') ? StatusBar.setBackgroundColor(config.primary_color) : null;
+            this._retrieveData();
         });
+
     }
 
     componentWillUnmount() {
@@ -42,11 +77,7 @@ class Settings extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left>
-                        <Button transparent>
-                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
-                        </Button>
-                    </Left>
+                    <Left/>
                     <Body>
                         <Title style={{color:'white'}}>Paramétres</Title>
                     </Body>
@@ -55,6 +86,39 @@ class Settings extends React.Component {
                 <View style={styles.container}>
                     <Content contentContainerStyle={{flex: 1}}>
                         <ScrollView>
+                            <Separator bordered>
+                                <Text style={{fontSize:12}}>Compte</Text>
+                            </Separator>
+                            {(this.state.connected) ?
+                                <ListItem icon onPress={() => this.props.navigation.push('Account')}>
+                                    <Left>
+                                        <Button style={{ backgroundColor: "#880e4f" }}>
+                                            <FontAwesome active name="user" color={'white'} />
+                                        </Button>
+                                    </Left>
+                                    <Body>
+                                        <Text> {this.state.username}</Text>
+                                    </Body>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                                :
+                                <ListItem icon onPress={() => this.props.navigation.push('Login' , {'referer': 'Settings' })}>
+                                    <Left>
+                                        <Button style={{ backgroundColor: "#880e4f" }}>
+                                            <FontAwesome active name="user" color={'white'} />
+                                        </Button>
+                                    </Left>
+                                    <Body>
+                                        <Text>Connexion / Inscription</Text>
+                                    </Body>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            }
+
                             <Separator bordered>
                                 <Text style={{fontSize:12}}>GENERAL</Text>
                             </Separator>

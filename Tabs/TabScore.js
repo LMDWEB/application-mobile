@@ -44,9 +44,7 @@ class TabScore extends React.Component {
     }
 
     componentDidMount() {
-
         const { match } = this.props;
-
         this._retrieveData();
 
         getBestScore(match.id, config.admin_jwt).then(data => {
@@ -118,6 +116,19 @@ class TabScore extends React.Component {
 
     _showScoreForm () {
 
+        const { match } = this.props;
+
+        let a = [];
+
+        for (var i=0; i <= 15; i++)
+            a.push(i);
+
+        let scores = a.map(function(value, key){
+            return (
+                <Picker.Item key={value} label={value} value={value} />
+            );
+        });
+
         if (this.state.connected) {
             return (
                 <View>
@@ -177,54 +188,68 @@ class TabScore extends React.Component {
 
         const { match } = this.props;
 
-        let a = [];
+        if (match != undefined) {
 
-        for (var i=0; i <= 15; i++)
-            a.push(i);
-
-        let scores = a.map(function(value, key){
             return (
-                <Picker.Item key={value} label={value} value={value} />
-            );
-        });
-
-        return(
-            <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
-                {this._showScoreForm()}
-                <View style={{paddingHorizontal: 10}}>
-                    <Text style={styles.title}>Score Moyen</Text>
-                    <View style={styles.card_container}>
-                        <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-                            <Text style={{marginRight: 5}}>{match.homeTeam.name} </Text>
-                            <Image style={{width:35,height:35,marginRight: 5}} source={ (match.homeTeam.logo) ? { uri: match.homeTeam.logo} : require('../Images/team.png') } />
-                            <Text style={{fontWeight: 'bold',marginRight: 5}}> {(this.state.bestScore) ? this.state.bestScore.scoreHomeTeam : ' ' } - {(this.state.bestScore) ? this.state.bestScore.scoreAwayTeam : ' ' } </Text>
-                            <Image style={{width:35,height:35,marginRight: 5}} source={ (match.awayTeam.logo) ? { uri: match.awayTeam.logo} : require('../Images/team.png') } />
-                            <Text>{match.awayTeam.name} </Text>
+                <View style={{paddingHorizontal: 10, backgroundColor: '#F6F6F6'}}>
+                    {this._showScoreForm()}
+                    <View style={{paddingHorizontal: 10}}>
+                        <Text style={styles.title}>Score Moyen</Text>
+                        <View style={styles.card_container}>
+                            <View style={{
+                                padding: 15,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{marginRight: 5}}>{match.homeTeam.name} </Text>
+                                <Image style={{width: 35, height: 35, marginRight: 5}}
+                                       source={(match.homeTeam.logo) ? {uri: match.homeTeam.logo} : require('../Images/team.png')}/>
+                                <Text style={{
+                                    fontWeight: 'bold',
+                                    marginRight: 5
+                                }}> {(this.state.bestScore) ? this.state.bestScore.scoreHomeTeam : ' '} - {(this.state.bestScore) ? this.state.bestScore.scoreAwayTeam : ' '} </Text>
+                                <Image style={{width: 35, height: 35, marginRight: 5}}
+                                       source={(match.awayTeam.logo) ? {uri: match.awayTeam.logo} : require('../Images/team.png')}/>
+                                <Text>{match.awayTeam.name} </Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <Button style={{flex:1,marginRight:5}} disabled small block info iconLeft>
-                            <FontAwesome style={{marginLeft: 7}} name='futbol-o' size={18} color={'white'} />
-                            <Text numberOfLines={1}>Précision : {(this.state.bestScore) ? this.state.bestScore.accuracy : 0 } %</Text>
-                        </Button>
-                        <Button style={{flex:1,marginLeft:5}} disabled small block warning iconLeft>
-                            <FontAwesome style={{marginLeft: 7}} name='user' size={18} color={'white'} />
-                            <Text numberOfLines={1}>Contributeurs : {(this.state.bestScore) ? this.state.bestScore.contributors : 0 }</Text>
-                        </Button>
-                    </View>
-                    <Text style={styles.title}>Votre score</Text>
-                    <View style={styles.card_container}>
-                        <View style={{padding: 15,flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-                            <Text style={{marginRight: 5}}>{match.homeTeam.name} </Text>
-                            <Image style={{width:35,height:35,marginRight: 5}} source={ (match.homeTeam.logo) ? { uri: match.homeTeam.logo} : require('../Images/team.png') } />
-                            <Text style={{fontWeight: 'bold',marginRight: 5}}> {(this.state.scoreHomeTeam) ? this.state.scoreHomeTeam : ' ' } - {(this.state.scoreAwayTeam) ? this.state.scoreAwayTeam : ' ' } </Text>
-                            <Image style={{width:35,height:35,marginRight: 5}} source={ (match.awayTeam.logo) ? { uri: match.awayTeam.logo} : require('../Images/team.png') } />
-                            <Text>{match.awayTeam.name} </Text>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Button style={{flex: 1, marginRight: 5}} disabled small block info iconLeft>
+                                <FontAwesome style={{marginLeft: 7}} name='futbol-o' size={18} color={'white'}/>
+                                <Text numberOfLines={1}>Précision
+                                    : {(this.state.bestScore) ? this.state.bestScore.accuracy : 0} %</Text>
+                            </Button>
+                            <Button style={{flex: 1, marginLeft: 5}} disabled small block warning iconLeft>
+                                <FontAwesome style={{marginLeft: 7}} name='user' size={18} color={'white'}/>
+                                <Text numberOfLines={1}>Contributeurs
+                                    : {(this.state.bestScore) ? this.state.bestScore.contributors : 0}</Text>
+                            </Button>
+                        </View>
+                        <Text style={styles.title}>Votre score</Text>
+                        <View style={styles.card_container}>
+                            <View style={{
+                                padding: 15,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{marginRight: 5}}>{match.homeTeam.name} </Text>
+                                <Image style={{width: 35, height: 35, marginRight: 5}}
+                                       source={(match.homeTeam.logo) ? {uri: match.homeTeam.logo} : require('../Images/team.png')}/>
+                                <Text style={{
+                                    fontWeight: 'bold',
+                                    marginRight: 5
+                                }}> {(this.state.scoreHomeTeam) ? this.state.scoreHomeTeam : ' '} - {(this.state.scoreAwayTeam) ? this.state.scoreAwayTeam : ' '} </Text>
+                                <Image style={{width: 35, height: 35, marginRight: 5}}
+                                       source={(match.awayTeam.logo) ? {uri: match.awayTeam.logo} : require('../Images/team.png')}/>
+                                <Text>{match.awayTeam.name} </Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-        );
+            );
+        }
     }
 }
 

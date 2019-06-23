@@ -41,19 +41,19 @@ class Account extends React.Component {
         this.state = {
             isOnline: true,
             isLoading : false,
+            username: ''
         };
     }
 
     _load () {
 
-        this.setState({ isLoading: true});
-
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                this.setState({
-                    isLoading: false,
-                    isOnline: true,
-                    refreshing: false
+
+                AsyncStorage.getItem("JWT").then((token) => {
+                    getUser(token).then(data => {
+                        this.setState({ isOnline: true, username:data.name})
+                    });
                 });
             } else {
                 this.setState({ isOnline: false, isLoading: false });
@@ -109,14 +109,22 @@ class Account extends React.Component {
         }
     }
 
+    _removeItem = async () => {
+        try {
+            await AsyncStorage.removeItem('JWT');
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
     _logout () {
 
         this.setState({isLoading: true});
 
         NetInfo.isConnected.fetch().then(isConnected => {
             if (isConnected){
-                AsyncStorage.removeItem('JWT');
-                this.props.navigation.navigate('News');
+               this._removeItem();
+               this.props.navigation.navigate('Settings');
 
                 Toast.show({
                     text: 'Vous êtes déconnecté',
@@ -129,6 +137,11 @@ class Account extends React.Component {
             }
         });
 
+    }
+
+    _displayLoading() {
+        if (this.state.isLoading) return (<ActivityIndicator size='large' />)
+        else return (<Icon name='power' />)
     }
 
     render() {
@@ -152,18 +165,17 @@ class Account extends React.Component {
                                 <Text>Votre compte</Text>
                             </Separator>
                             <ListItem>
-                                <Text>Caroline Aaron</Text>
+                                <Text>{this.state.username}</Text>
                             </ListItem>
                             <Separator bordered>
                             </Separator>
                             <View style={{padding: 10,}}>
                                 <Button iconLeft block danger onPress={() => this._logout()}>
-                                    <Icon name='power' />
+                                    {this._displayLoading()}
                                     <Text>Se deconecter</Text>
                                 </Button>
                             </View>
                         </ScrollView>
-                        {this._displayLoading()}
                         {this._displayOffline()}
                     </Content>
                 </View>

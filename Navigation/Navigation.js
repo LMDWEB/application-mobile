@@ -80,6 +80,16 @@ const SettingsStackNavigator = createStackNavigator({
         screen: Settings,
         navigationOptions: options
     },
+
+    Login : {
+        screen: Login,
+        navigationOptions: options
+    },
+
+    Account:{
+        screen: Account,
+        navigationOptions: options
+    }
 });
 
 // Tab Navigator
@@ -140,42 +150,4 @@ const TabNavigator = createBottomTabNavigator({
     }
 );
 
-
-// Drawer Navigator
-
-const AvatarComponent = (props) => {
-    return(
-        <SafeAreaView style={{flex: 1}}>
-            <TouchableOpacity
-                style={{height: 150, backgroundColor: '#303a59', alignItems: 'center', justifyContent: 'center'}}
-                onPress={() => props.navigation.navigate('Account')}
-            >
-                <Image source={require('../Images/avatar-default.jpg')}
-                       style={{height: 120, width: 120, borderRadius: 60}}
-                />
-            </TouchableOpacity>
-            <ScrollView>
-                <DrawerItems {...props}/>
-            </ScrollView>
-        </SafeAreaView>
-     )
-};
-
-const RegisterComponent = (props) => (
-    <View onPress={() => console.log(AsyncStorage.getAllKeys())}>
-        <Text>Inscription</Text>
-    </View>
-);
-
-const AuthenticateStack = createStackNavigator({ Home: NewsStackNavigator});
-const DisconnectesStack = createStackNavigator({ Connexion: Login, Inscription: RegisterComponent });
-
-const DrawerNavigator = createDrawerNavigator({
-   Accueil:TabNavigator,
-   Login: Login,
-   Inscription: RegisterComponent,
-}, {
-        contentComponent: AvatarComponent
-    });
-
-export default createAppContainer(DrawerNavigator)
+export default createAppContainer(TabNavigator)

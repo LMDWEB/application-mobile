@@ -16,6 +16,7 @@ import { Container, Header, Title, Content, Left, Right, Body, Text, Item, Input
 import {login} from "../Api/Lmdfoot"
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
+import {WebBrowser} from "expo";
 
 class Login extends React.Component {
 
@@ -115,7 +116,8 @@ class Login extends React.Component {
                     }
                     else if (data.hasOwnProperty('token')) {
                         this._storeToken(data.token);
-                        this.props.navigation.navigate('News')
+
+                        this.props.navigation.navigate( (this.props.navigation.state.params.referer) ? this.props.navigation.state.params.referer : 'News' , (this.props.navigation.state.params.id) ? {id:this.props.navigation.state.params.id} : null);
 
                         Toast.show({
                             text: 'Vous êtes connecté',
@@ -146,7 +148,7 @@ class Login extends React.Component {
                 <Header style={{ backgroundColor: config.primary_color }}>
                     <Left>
                         <Button transparent>
-                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
+                            <Icon style={{color:'white',marginLeft: 10}} name='arrow-back' onPress={ () => this.props.navigation.goBack()} />
                         </Button>
                     </Left>
                     <Body>
@@ -171,7 +173,10 @@ class Login extends React.Component {
                                         <Text>Se connecter</Text>
                                     </Button>
                                 </Form>
-                                <View style={{alignItems: 'center',marginTop: 50}}>
+                                <View style={{alignItems: 'center'}}>
+                                    <Button block transparent style={{marginVertical: 30}} onPress={() => WebBrowser.openBrowserAsync('https://api.lmdfoot.com/registration_old')}>
+                                        <Text>S'INSCRIRE</Text>
+                                    </Button>
                                     <Image style={{width:150,height:150}} source={ require('../Images/supporter.png') } />
                                     <Text style={{marginTop:30,fontWeight: 'bold', fontSize:20}}>Soyez le 12 homme du match !!</Text>
                                     <Text style={{marginTop:30,marginBottom: 10,fontSize:18}}>Commenter les matchs</Text>

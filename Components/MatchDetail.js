@@ -101,23 +101,9 @@ class MatchDetail extends React.Component {
         }
     }
 
-
-    _displayDetail = (id) => {
-        this.props.navigation.push('Match', { id: id })
-    };
-
-    _displayNoResults () {
-        return (
-            <View style={details.no_result_container}>
-                <Text style={details.no_result_text}>Aucun resultat trouvé</Text>
-            </View>
-        );
-    };
-
     _displayMatch() {
 
         const { match } = this.state;
-        const movie = {};
 
         if (match != undefined && this.state.isOnline) {
 

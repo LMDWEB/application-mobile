@@ -143,11 +143,7 @@ class Matchs extends React.Component {
         return (
             <Container>
                 <Header style={{ backgroundColor: config.primary_color }}>
-                    <Left>
-                        <Button transparent>
-                            <Icon style={{color:'white',marginLeft: 10}} name='menu' onPress={ () => this.props.navigation.openDrawer()} />
-                        </Button>
-                    </Left>
+                    <Left/>
                     <Body>
                         <Title style={{color:'white'}}>Matchs</Title>
                     </Body>

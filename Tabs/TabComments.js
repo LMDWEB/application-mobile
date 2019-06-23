@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, Platform, StatusBar, View} from 'react-native';
+import {AsyncStorage, Platform, StatusBar, View, ScrollView} from 'react-native';
 import {
     Container,
     Header,
@@ -41,7 +41,9 @@ class TabComments extends React.Component {
     }
 
     componentDidMount() {
-        this._retrieveData();
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            this._retrieveData();
+        });
     }
 
     _addComment () {
@@ -108,7 +110,7 @@ class TabComments extends React.Component {
             }
             else {
                 return (
-                    <Button style={{marginTop: 15, paddingRight: 30, width: '100%',marginRight:10}} iconLeft primary onPress={() => this.props.navigation.push('Login')}>
+                    <Button style={{marginTop: 15, paddingRight: 30, width: '100%',marginRight:10}} iconLeft primary onPress={() => this.props.navigation.push('Login' , {'referer': 'MatchDetail', 'id': this.props.match_id})}>
                         <FontAwesome style={{paddingLeft: 15}} name='user' size={30} color={'white'}/>
                         <Text style={{fontSize: 13}}>Connecter-vous pour commenter les matchs</Text>
                     </Button>
@@ -124,7 +126,7 @@ class TabComments extends React.Component {
             <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
                 {this._showCommentForm()}
                 <Text style={{textAlign: 'center',marginVertical: 20,fontSize:19, color:'red',fontWeight: "bold"}}>Decouvrez les moments forts du match !!!</Text>
-
+                <ScrollView>
                 { (comments.length > 0) ?
                     comments.map(( comment, key ) =>
                         (
@@ -146,7 +148,7 @@ class TabComments extends React.Component {
                         <FontAwesome  name='comments' size={70} color={'grey'} />
                     </View>
                 }
-
+                </ScrollView>
             </View>
 
         );
