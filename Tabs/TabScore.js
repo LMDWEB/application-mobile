@@ -1,26 +1,19 @@
 import React from 'react';
-import {AsyncStorage, Image, NetInfo, Platform, ScrollView, StatusBar, TouchableOpacity, View} from 'react-native';
+import {AsyncStorage, Image, NetInfo, Platform, ScrollView, TouchableOpacity, View , Modal,TouchableHighlight} from 'react-native';
 import {
-    Container,
     Header,
-    Content,
-    Card,
-    CardItem,
     Text,
     Icon,
-    Thumbnail,
     Left,
     Body,
-    Textarea,
     Form,
     Button,
     Right,
     Item,
-    Input,
     Toast,
-    Picker, Separator
+    Picker,
+    Title
 } from 'native-base';
-import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
@@ -39,13 +32,18 @@ class TabScore extends React.Component {
             bestScore: undefined,
             connected : false,
             isLoading : true,
-            isOnline: false
+            isOnline: false,
+            modalVisible:false
         };
     }
 
     componentDidMount() {
         const { match } = this.props;
-        this._retrieveData();
+
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            console.log("ff")
+            this._retrieveData();
+        });
 
         getBestScore(match.id, config.admin_jwt).then(data => {
             this.setState({
@@ -56,8 +54,13 @@ class TabScore extends React.Component {
         });
     }
 
+    componentWillUnmount() {
+        this._navListener.remove();
+    }
+
     _retrieveData = async () => {
         try {
+            console.log("couc")
             const value = await AsyncStorage.getItem('JWT');
             if (value !== null) {
                 this.setState({ connected: true})
@@ -85,16 +88,11 @@ class TabScore extends React.Component {
 
                 addScore(match.id, this.state.scoreHomeTeam, this.state.scoreAwayTeam, token).then(data => {
 
-                    console.log(data);
-                    /*
                     this.setState({
-                        comment : '',
-                        comments: [ ...[data], ...this.state.comments ],
-                        isLoading: false,
-                        isOnline: true
+                        scoreHomeTeam:data.scoreHomeTeam,
+                        scoreAwayTeam:data.scoreAwayTeam,
+                        modalVisible:false
                     });
-                    */
-
 
                     Toast.show({
                         text: 'Score envoyé',
@@ -114,62 +112,14 @@ class TabScore extends React.Component {
         }
     }
 
-    _showScoreForm () {
-
-        const { match } = this.props;
-
-        let a = [];
-
-        for (var i=0; i <= 15; i++)
-            a.push(i);
-
-        let scores = a.map(function(value, key){
-            return (
-                <Picker.Item key={value} label={value} value={value} />
-            );
-        });
+    _showButtons () {
 
         if (this.state.connected) {
             return (
-                <View>
-                    <Text style={styles.title}>Entrez votre score</Text>
-                    <Form style={{flexDirection: 'row',justifyContent:'space-evenly',paddingHorizontal: 10}}>
-                        <Item picker style={{flex:1}}>
-                            <Picker
-                                mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
-                                style={{ width: undefined,backgroundColor:'white'}}
-                                placeholder={"Score " + match.homeTeam.name}
-                                placeholderStyle={{ color: "black" }}
-                                placeholderIconColor="#007aff"
-                                selectedValue={this.state.scoreHomeTeam}
-                                onValueChange={this._handleSelectHomeTeam.bind(this)}
-                            >
-                                {scores}
-                            </Picker>
-                        </Item>
-                        <Item picker style={{flex:1}}>
-                            <Picker
-                                mode="dropdown"
-                                iosIcon={<Icon name="arrow-down" />}
-                                style={{ width: undefined }}
-                                placeholder={"Score " + match.awayTeam.name}
-                                placeholderStyle={{ color: "black" }}
-                                placeholderIconColor="#007aff"
-                                selectedValue={this.state.scoreAwayTeam}
-                                onValueChange={this._handleSelectAwayTeam.bind(this)}
-                            >
-                                {scores}
-                            </Picker>
-                        </Item>
-                    </Form>
-                    <Button style={{paddingHorizontal:10}} iconLeft primary block onPress={() => this._addScore(this.state.scoreHomeTeam,this.state.scoreAwayTeam)}>
-                        <FontAwesome style={{paddingLeft: 15}} name='futbol-o' size={30} color={'white'}/>
-                        <Text style={{fontSize: 13}}>Envoyer le score</Text>
-                    </Button>
-                    <Separator bordered>
-                    </Separator>
-                </View>
+                <Button style={{marginTop: 15, paddingRight: 30, width: '100%',marginRight:10}} iconLeft success onPress={() => this.setState({modalVisible:true})}>
+                    <FontAwesome style={{paddingLeft: 15}} name='futbol-o' size={30} color={'white'}/>
+                    <Text style={{fontSize: 13,textAlign: 'center'}}>Proposer votre score</Text>
+                </Button>
             )
         }
         else {
@@ -190,9 +140,99 @@ class TabScore extends React.Component {
 
         if (match != undefined) {
 
+            let a = [];
+
+            for (var i=0; i <= 15; i++)
+                a.push(i);
+
+            let scores = a.map(function(value, key){
+                return (
+                    <Picker.Item key={value} label={value} value={value} />
+                );
+            });
+
             return (
                 <View style={{paddingHorizontal: 10, backgroundColor: '#F6F6F6'}}>
-                    {this._showScoreForm()}
+                    <Modal
+                        animationType="slide"
+                        transparent={false}
+                        visible={this.state.modalVisible}
+                        presentationStyle={'fullScreen'}>
+                        <View style={{flex:1}}>
+                            <TouchableOpacity
+                                onPress={() => this.setState({modalVisible:false})}
+                                style={{position: 'absolute',top:70,right:10,width: 50,zIndex:2}}>
+                                <Icon right ios="ios-close" android="md-close" style={{ color: 'black', fontSize:60}}/>
+                            </TouchableOpacity>
+                            <View style={{justifyContent:'center',flex:1}}>
+                                <View style={{}}>
+                                    <Text style={styles.title}>Entrez votre score</Text>
+                                    <Form style={{marginTop:20}}>
+                                        <Item picker style={{marginBottom: 10}}>
+                                            <Picker
+                                                mode="dropdown"
+                                                iosIcon={<Icon name="arrow-down" />}
+                                                style={{ width: undefined,backgroundColor:'#4DAD4A'}}
+                                                placeholder={"Score " + match.homeTeam.name}
+                                                placeholderStyle={{ color: "black" }}
+                                                placeholderIconColor="#007aff"
+                                                selectedValue={this.state.scoreHomeTeam}
+                                                onValueChange={this._handleSelectHomeTeam.bind(this)}
+                                                renderHeader={backAction =>
+                                                    <Header>
+                                                        <Left>
+                                                            <Button transparent onPress={backAction}>
+                                                                <Icon name="arrow-back" style={{ color: "#0960FF" }} />
+                                                            </Button>
+                                                        </Left>
+                                                        <Body style={{ flex: 3 }}>
+                                                            <Title style={{ color: "#0960FF" }}>Sélectionner un score </Title>
+                                                        </Body>
+                                                        <Right />
+                                                    </Header>}
+                                            >
+                                                {scores}
+                                            </Picker>
+                                        </Item>
+                                        <Item picker style={{}}>
+                                            <Picker
+                                                mode="dropdown"
+                                                iosIcon={<Icon name="arrow-down" />}
+                                                style={{ width: undefined, backgroundColor:'#EB9E3E' }}
+                                                placeholder={"Score " + match.awayTeam.name}
+                                                placeholderStyle={{ color: "black" }}
+                                                placeholderIconColor="#007aff"
+                                                selectedValue={this.state.scoreAwayTeam}
+                                                onValueChange={this._handleSelectAwayTeam.bind(this)}
+                                                renderHeader={backAction =>
+                                                    <Header>
+                                                        <Left>
+                                                            <Button transparent onPress={backAction}>
+                                                                <Icon name="arrow-back" style={{ color: "#0960FF" }} />
+                                                            </Button>
+                                                        </Left>
+                                                        <Body style={{ flex: 3 }}>
+                                                            <Title style={{ color: "#0960FF" }}>Sélectionner un score </Title>
+                                                        </Body>
+                                                        <Right />
+                                                    </Header>}
+                                            >
+                                                {scores}
+                                            </Picker>
+                                        </Item>
+                                    </Form>
+                                    <Button style={{paddingHorizontal:10,marginVertical: 20}} iconLeft primary block onPress={() => this._addScore(this.state.scoreHomeTeam,this.state.scoreAwayTeam)}>
+                                        <FontAwesome style={{paddingLeft: 15}} name='futbol-o' size={30} color={'white'}/>
+                                        <Text style={{fontSize: 13}}>Envoyer le score</Text>
+                                    </Button>
+                                    <View style={{alignItems:'center',marginTop:50}}>
+                                        <Image style={{width:185,height:185,marginRight: 5}} source={ require('../Images/fans.png') } />
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    {this._showButtons()}
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={styles.title}>Score Moyen</Text>
                         <View style={styles.card_container}>
@@ -218,7 +258,7 @@ class TabScore extends React.Component {
                             <Button style={{flex: 1, marginRight: 5}} disabled small block info iconLeft>
                                 <FontAwesome style={{marginLeft: 7}} name='futbol-o' size={18} color={'white'}/>
                                 <Text numberOfLines={1}>Précision
-                                    : {(this.state.bestScore) ? this.state.bestScore.accuracy : 0} %</Text>
+                                    : {(this.state.bestScore) ? Math.trunc(this.state.bestScore.accuracy) : 0} %</Text>
                             </Button>
                             <Button style={{flex: 1, marginLeft: 5}} disabled small block warning iconLeft>
                                 <FontAwesome style={{marginLeft: 7}} name='user' size={18} color={'white'}/>

@@ -108,7 +108,7 @@ class MatchDetail extends React.Component {
         if (match != undefined && this.state.isOnline) {
 
             return (
-                <Container>
+                <Container style={{backgroundColor:'#F6F6F6'}}>
                     <ScrollView>
                         <Content style={styles.container}>
                             <View>

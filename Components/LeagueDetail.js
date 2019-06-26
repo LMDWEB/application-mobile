@@ -16,7 +16,7 @@ import {
     Platform,
     AsyncStorage
 } from 'react-native'
-import { Container, Content, Text, Badge, Icon,Picker,Item,Form } from 'native-base';
+import { Container, Content, Text, Header, Icon,Picker,Item,Form,Left,Right,Button,Body,Title } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
 import moment from 'moment'
@@ -176,11 +176,24 @@ class LeagueDetail extends React.Component {
                                             mode="dropdown"
                                             iosIcon={<Icon name="arrow-down" />}
                                             style={{ width: undefined,backgroundColor:'white'}}
+                                            headerBackButtonText="Retour"
                                             placeholder="Selectionner la journeé"
                                             placeholderStyle={{ color: "black" }}
                                             placeholderIconColor="#007aff"
                                             selectedValue={this.state.round}
                                             onValueChange={this._handleSelect.bind(this)}
+                                            renderHeader={backAction =>
+                                                <Header>
+                                                    <Left>
+                                                        <Button transparent onPress={backAction}>
+                                                            <Icon name="arrow-back" style={{ color: "#0960FF" }} />
+                                                        </Button>
+                                                    </Left>
+                                                    <Body style={{ flex: 3 }}>
+                                                        <Title style={{ color: "#0960FF" }}>Selection une journée</Title>
+                                                    </Body>
+                                                    <Right />
+                                                </Header>}
                                         >
                                         {journeys}
                                         </Picker>

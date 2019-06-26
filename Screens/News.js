@@ -16,7 +16,7 @@ class News extends React.Component {
             news: [],
             isOnline: true,
             isLoading : false,
-            refreshing: false,
+            refreshing: false
         };
     }
 

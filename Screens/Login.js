@@ -117,7 +117,9 @@ class Login extends React.Component {
                     else if (data.hasOwnProperty('token')) {
                         this._storeToken(data.token);
 
-                        this.props.navigation.navigate( (this.props.navigation.state.params.referer) ? this.props.navigation.state.params.referer : 'News' , (this.props.navigation.state.params.id) ? {id:this.props.navigation.state.params.id} : null);
+                        //this.props.navigation.navigate( (this.props.navigation.state.params.referer) ? this.props.navigation.state.params.referer : 'News' , (this.props.navigation.state.params.id) ? {id:this.props.navigation.state.params.id} : null);
+
+                        this.props.navigation.goBack();
 
                         Toast.show({
                             text: 'Vous êtes connecté',

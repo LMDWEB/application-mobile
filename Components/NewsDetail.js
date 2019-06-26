@@ -1,9 +1,8 @@
 import React from 'react'
-import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform, FlatList} from 'react-native'
-import { Container, Content, Text, Badge, Icon, Button, Card, CardItem, Body } from 'native-base';
+import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform, FlatList, ImageBackground} from 'react-native'
+import { Container, Content, Text, Badge, Icon, Button,Body } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
-import Match from '../Components/Match'
-import Player from '../Components/Player'
+import Card from '../Components/Card'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
 import {getNewsDetail, getImageFromApi} from '../Api/News'
@@ -91,84 +90,13 @@ class NewsDetail extends React.Component {
                 <View style={details.info_container}>
                         <TouchableOpacity onPress={() => this.setState({expandOverview:!this.state.expandOverview})}>
                             <Text numberOfLines={(this.state.expandOverview) ? null : 6} style={details.description}>
-                                {news.content}
+                                {news.content.replace(/<\/?[^>]+(>|$)/g, "")}
                             </Text>
                         </TouchableOpacity>
                 </View>
             )
         }
     }
-
-    _displayPlayers () {
-
-        const { news } = this.state;
-
-        if (news.players.length == 0) {
-            return (
-                <Text style={{textAlign: 'center',fontWeight: 'bold', marginTop:10}}>Aucun joueurs</Text>
-            )
-        }
-
-        else if (news.players.length == 1) {
-            return (
-                <TouchableOpacity onPress={() => console.log("") }>
-                    <Card style={{marginRight:10}}>
-                        <CardItem cardBody>
-                            <Image source={ (news.players[0].image) ? { uri: getImageFromApi(news.players[0].image) } : require('../Images/player-default.png') } style={{height: 200, width: null, flex: 1, resizeMode: 'cover'}}/>
-                        </CardItem>
-                        <CardItem>
-                            <Body style={{alignItems: 'center'}}>
-                                <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>{news.players[0].name}</Text>
-                                <Text style={{fontWeight:'bold',color:'grey'}}>Numero {news.players[0].number}</Text>
-                            </Body>
-                        </CardItem>
-                    </Card>
-                </TouchableOpacity>
-            )
-        }
-
-        else {
-
-
-        }
-
-    }
-
-    _displayClubs () {
-
-        const { news } = this.state;
-
-        if (news.clubs.length == 0) {
-            return (
-                <Text style={{textAlign: 'center',fontWeight: 'bold', marginTop:10}}>Aucun joueurs</Text>
-            )
-        }
-
-        else if (news.clubs.length == 1) {
-            return (
-                <TouchableOpacity onPress={() => console.log("") }>
-                    <Card style={{marginRight:10}}>
-                        <CardItem cardBody style={{alignItems: 'center'}}>
-                            <Image source={ (news.clubs[0].logo) ? { uri: news.clubs[0].logo } : require('../Images/club-default.png') } style={{height: 100, width: 100}}/>
-                        </CardItem>
-                        <CardItem>
-                            <Body style={{alignItems: 'center'}}>
-                                <Text style={{fontWeight:'bold',fontSize:20,marginBottom:10}}>{news.clubs[0].name}</Text>
-                                <Text style={{fontWeight:'bold',color:'grey'}}>{news.clubs[0].country}</Text>
-                            </Body>
-                        </CardItem>
-                    </Card>
-                </TouchableOpacity>
-            )
-        }
-
-        else {
-
-
-        }
-
-    }
-
 
     _displayNews() {
 
@@ -193,9 +121,25 @@ class NewsDetail extends React.Component {
                             {this._displayResume()}
                             <View style={styles.main_container}>
                                 <Text style={styles.title}>Joueur{(news.players.length > 1) ? 's' : ''}</Text>
-                                {this._displayPlayers()}
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <FlatList
+                                        horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        data={news.players}
+                                        keyExtractor={(item) => item.id.toString()}
+                                        renderItem={({item}) => <Card data={item}></Card>}
+                                    />
+                                </ScrollView>
                                 <Text style={styles.title}>Club{(news.clubs.length > 1) ? 's' : ''}</Text>
-                                {this._displayClubs()}
+                                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <FlatList
+                                        horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        data={news.clubs}
+                                        keyExtractor={(item) => item.id.toString()}
+                                        renderItem={({item}) => <Card data={item}></Card>}
+                                    />
+                                </ScrollView>
                             </View>
                         </Content>
                     </ScrollView>

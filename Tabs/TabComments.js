@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, Platform, StatusBar, View, ScrollView} from 'react-native';
+import {AsyncStorage, Platform, StatusBar, View, ScrollView, RefreshControl} from 'react-native';
 import {
     Container,
     Header,
@@ -22,7 +22,7 @@ import {
 import moment from "moment/moment";
 import styles from '../Style/Style';
 import { FontAwesome } from '@expo/vector-icons';
-import {addCommentary} from '../Api/Lmdfoot';
+import {addCommentary, getMatch} from '../Api/Lmdfoot';
 import config from '../config';
 import { withNavigation } from 'react-navigation';
 
@@ -36,7 +36,8 @@ class TabComments extends React.Component {
             comments : this.props.comments,
             connected : false,
             isLoading : true,
-            isOnline: false
+            isOnline: false,
+            refreshing: false
         };
     }
 
@@ -45,6 +46,20 @@ class TabComments extends React.Component {
             this._retrieveData();
         });
     }
+
+    componentWillUnmount() {
+        this._navListener.remove();
+    }
+
+    _onRefresh = () => {
+
+        getMatch(this.props.match_id, config.admin_jwt).then(data => {
+            this.setState({
+                refreshing:false,
+                comments: data.comments,
+            });
+        });
+    };
 
     _addComment () {
 
@@ -125,8 +140,8 @@ class TabComments extends React.Component {
         return(
             <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
                 {this._showCommentForm()}
-                <Text style={{textAlign: 'center',marginVertical: 20,fontSize:19, color:'red',fontWeight: "bold"}}>Decouvrez les moments forts du match !!!</Text>
-                <ScrollView>
+                <Text style={{textAlign: 'center',marginVertical: 20,fontSize:19, color:'#721c24',backgroundColor:'#f8d7da',borderColor: '#f5c6cb',padding: 10, borderWidth: 2,borderRadius: 4}}>Decouvrez les moments forts du match !!!</Text>
+                <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                 { (comments.length > 0) ?
                     comments.map(( comment, key ) =>
                         (
@@ -143,8 +158,8 @@ class TabComments extends React.Component {
                                 </CardItem>
                             </Card>
                         )) :
-                    <View style={{alignItems: 'center'}}>
-                        <Text style={styles.offline_text}>Aucun commentaire </Text>
+                    <View style={{alignItems: 'center',marginVertical: 20}}>
+                        <Text style={styles.offline_text}>Aucun commentaire pour l'instant ... </Text>
                         <FontAwesome  name='comments' size={70} color={'grey'} />
                     </View>
                 }

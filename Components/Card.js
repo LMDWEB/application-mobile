@@ -10,17 +10,17 @@ class Card extends React.Component {
 
     render() {
 
+        const { data } = this.props;
+
         return (
-            <View>
-                <TouchableOpacity style={card.container} onPress={() => console.log("test")}>
-                    <View style={card.image_container}>
-                        <Image style={card.image} source={ (image) ? { uri: getImageFromApi(image, 342) } : require('../Images/default.png') } />
-                    </View>
-                    <View style={card.info_container}>
-                        <Text numberOfLines={2} style={card.title}>{name}</Text>
-                        <Text numberOfLines={2} style={card.info}> { (['movie', 'serie', 'episode'].includes(type)) ? moment(info).format('DD MMMM YYYY') : info} </Text>
-                    </View>
-                </TouchableOpacity>
+            <View style={card.container} onPress={() => console.log("test")}>
+                <View style={card.image_container}>
+                    <Image style={card.image} source={ (data.logo) ? { uri: data.logo } : require('../Images/player-default.png') } />
+                </View>
+                <View style={card.info_container}>
+                    <Text numberOfLines={2} style={card.title}>{data.name}</Text>
+                    <Text numberOfLines={2} style={card.info}> { (data.number) ? data.number : data.country } </Text>
+                </View>
             </View>
         )
     }

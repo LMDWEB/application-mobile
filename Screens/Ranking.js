@@ -118,7 +118,7 @@ class Ranking extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container style={{backgroundColor:'#F6F6F6'}}>
                 <Header style={{ backgroundColor: config.primary_color }}>
                     <Left/>
                     <Body>
