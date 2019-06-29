@@ -1,6 +1,5 @@
 import React from 'react'
-import {View, Image, TouchableOpacity, Text, StyleSheet, Linking} from 'react-native'
-import { ListItem, Left, Body, Right, Thumbnail, Button, Icon} from 'native-base';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native'
 
 class League extends React.Component {
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform, FlatList, ImageBackground} from 'react-native'
-import { Container, Content, Text, Badge, Icon, Button,Body } from 'native-base';
+import {View, ActivityIndicator, ScrollView, Image, TouchableOpacity, NetInfo, StatusBar, Platform, FlatList} from 'react-native'
+import { Container, Content, Text} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Card from '../Components/Card'
 import details from '../Style/Detail'
@@ -127,7 +127,7 @@ class NewsDetail extends React.Component {
                                         showsHorizontalScrollIndicator={false}
                                         data={news.players}
                                         keyExtractor={(item) => item.id.toString()}
-                                        renderItem={({item}) => <Card data={item}></Card>}
+                                        renderItem={({item}) => <Card data={item} type={'player'}></Card>}
                                     />
                                 </ScrollView>
                                 <Text style={styles.title}>Club{(news.clubs.length > 1) ? 's' : ''}</Text>
@@ -137,7 +137,7 @@ class NewsDetail extends React.Component {
                                         showsHorizontalScrollIndicator={false}
                                         data={news.clubs}
                                         keyExtractor={(item) => item.id.toString()}
-                                        renderItem={({item}) => <Card data={item}></Card>}
+                                        renderItem={({item}) => <Card data={item} type={'club'}></Card>}
                                     />
                                 </ScrollView>
                             </View>

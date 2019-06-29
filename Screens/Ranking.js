@@ -9,10 +9,9 @@ import {
     RefreshControl,
     StatusBar,
     Platform,
-    AsyncStorage
 } from 'react-native'
 import styles from '../Style/Style'
-import {Container, Header, Title, Content, Left, Right, Body, Text, List, Button, Icon} from 'native-base';
+import {Container, Header, Title, Content, Left, Right, Body, Text} from 'native-base';
 import League from "../Components/League"
 import {getLeagues} from "../Api/Lmdfoot"
 import { FontAwesome } from '@expo/vector-icons';

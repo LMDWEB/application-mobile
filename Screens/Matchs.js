@@ -9,10 +9,9 @@ import {
     RefreshControl,
     StatusBar,
     Platform,
-    AsyncStorage
 } from 'react-native'
 import styles from '../Style/Style'
-import {Container, Header, Title, Content, Left, Right, Body, Text, Button, Icon} from 'native-base';
+import {Container, Header, Title, Content, Left, Right, Body, Text} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import Match from "../Components/Match";
@@ -115,19 +114,19 @@ class Matchs extends React.Component {
             return (
                 <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
                     <View style={styles.main_container}>
-                        <Text style={styles.title}>Match en cours</Text>
+                        <Text style={styles.title}>Matchs en cours</Text>
                         <FlatList
                             data={currentGames}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
-                        <Text style={styles.title}>Match terminé</Text>
+                        <Text style={styles.title}>Matchs terminé</Text>
                         <FlatList
                             data={lastGames}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({item}) => <Match data={item} displayDetail={this._displayDetail} ></Match>}
                         />
-                        <Text style={styles.title}>Match à venir</Text>
+                        <Text style={styles.title}>Matchs à venir</Text>
                         <FlatList
                             data={nextGames}
                             keyExtractor={(item) => item.id.toString()}

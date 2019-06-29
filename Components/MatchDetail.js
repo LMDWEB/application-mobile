@@ -4,30 +4,20 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    ImageBackground,
-    Share,
-    Alert,
     TouchableOpacity,
-    Linking,
-    FlatList,
     NetInfo,
     StatusBar,
-    Modal,
     Platform,
     AsyncStorage
 } from 'react-native'
-import { Container, Content, Text, Badge, Icon, Button, Tabs, Tab, Header } from 'native-base';
+import { Container, Content, Text, Tabs, Tab} from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
-import Match from '../Components/Match'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
 import config from '../config'
-
 import {getMatch} from '../Api/Lmdfoot'
-
 import TabComment from '../Tabs/TabComments';
 import TabScore from '../Tabs/TabScore';
-
 import moment from "moment/moment";
 
 class MatchDetail extends React.Component {
@@ -39,7 +29,8 @@ class MatchDetail extends React.Component {
         this.state = {
             match : undefined,
             isLoading : true,
-            isOnline: false
+            isOnline: false,
+            isConnected:false
         };
     }
 
@@ -64,10 +55,23 @@ class MatchDetail extends React.Component {
         });
     }
 
+    _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('JWT');
+            console.log("hello");
+            if (value !== null) {
+                this.setState({ isConnected: true})
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    };
+
     componentDidMount() {
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             (Platform.OS === 'android') ? StatusBar.setTranslucent(true) : null;
             (Platform.OS === 'android') ? StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.3)') : null;
+            this._retrieveData();
         });
         this._load()
     }
@@ -124,10 +128,10 @@ class MatchDetail extends React.Component {
                             <View>
                                 <Tabs>
                                     <Tab heading="Commentaires">
-                                        <TabComment match_id={match.id} comments={match.comments} />
+                                        <TabComment match_id={match.id} comments={match.comments} connected={this.state.isConnected} />
                                     </Tab>
                                     <Tab heading="Scores">
-                                        <TabScore match={match} />
+                                        <TabScore match={match} connected={this.state.isConnected} />
                                     </Tab>
                                 </Tabs>
                             </View>

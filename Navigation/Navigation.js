@@ -1,6 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Image, ScrollView, AsyncStorage, Text, TouchableOpacity} from 'react-native';
-import { createStackNavigator, createAppContainer, createBottomTabNavigator, createDrawerNavigator, DrawerItems, createSwitchNavigator } from "react-navigation";
+import { createStackNavigator, createAppContainer, createBottomTabNavigator} from "react-navigation";
 import News from "../Screens/News";
 import NewsDetail from "../Components/NewsDetail";
 import Ranking from "../Screens/Ranking";
@@ -13,7 +12,6 @@ import Account from '../Screens/Account'
 import config from "../config"
 
 import { FontAwesome } from '@expo/vector-icons';
-import {WebBrowser} from "expo";
 
 const options = {
     header: null

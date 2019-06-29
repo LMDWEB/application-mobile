@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, ScrollView, ActivityIndicator, FlatList, NetInfo, TouchableOpacity, RefreshControl, StatusBar, Platform} from 'react-native'
 import styles from '../Style/Style'
-import { Container, Header, Title, Content, Left, Right, Body, Text, Button, Icon} from 'native-base';
+import { Container, Header, Title, Content, Left, Right, Body, Text} from 'native-base';
 import Article from "../Components/Article"
 import {getNews} from "../Api/News"
 import { FontAwesome } from '@expo/vector-icons';

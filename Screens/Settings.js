@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Linking, Share, Alert, ScrollView, Image, StatusBar, Platform, AsyncStorage, NetInfo} from 'react-native'
+import {View, Linking, Share,ScrollView, Image, StatusBar, Platform, AsyncStorage} from 'react-native'
 import {
     Container,
     Header,
@@ -17,10 +17,10 @@ import {
     Toast
 } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
-import { Constants, WebBrowser } from 'expo'
+import { WebBrowser } from 'expo'
 import styles from "../Style/Style";
 import config from '../config'
-import {getUser, login} from '../Api/Lmdfoot'
+import {getUser} from '../Api/Lmdfoot'
 
 class Settings extends React.Component {
 
@@ -28,7 +28,7 @@ class Settings extends React.Component {
         super(props);
 
         this.state = {
-            notification:true,
+            notification:false,
             connected : false,
             username: '',
             isLoading : false
@@ -68,9 +68,15 @@ class Settings extends React.Component {
 
     _shareApplication() {
 
-        Share.share({ title: 'Viens découvrir l\'application Sporty !!', message: 'Viens vite découvrir l\'application Sporty, l\'application qui te permter de devenir le 12 éme homme du match  : https://popcorn.antonbourtnik.fr' })
-            .then(Alert.alert('Application partagée', null, [{text: 'OK', onPress: () => {}},]))
-            .catch(error => Alert.alert('Application non partagée', error.message, [{text: 'OK', onPress: () => {}},]))
+        Share.share({ title: 'Viens découvrir l\'application Sporty !!', message: 'Viens vite découvrir l\'application Sporty, l\'application qui te permter de devenir le 12 éme homme du match  : https://lmdfoot.com' })
+            .then(
+                Toast.show({
+                    text: 'Partage effectué',
+                    type: 'success',
+                    duration: 3000
+                })
+            )
+            .catch(error => Toast.show({text: 'Une erreur est survenue', type: 'danger', duration: 3000}))
     }
 
     render() {
@@ -151,7 +157,7 @@ class Settings extends React.Component {
                                     <Icon name="arrow-forward" />
                                 </Right>
                             </ListItem>
-                            <ListItem icon onPress={() => WebBrowser.openBrowserAsync("https://www.antonbourtnik.fr")}>
+                            <ListItem icon onPress={() => WebBrowser.openBrowserAsync("https://lmdfoot.com/")}>
                                 <Left>
                                     <Button style={{ backgroundColor: "#8F8E93" }}>
                                         <FontAwesome active name="balance-scale" color={'white'} />
@@ -164,27 +170,27 @@ class Settings extends React.Component {
                                     <Icon name="arrow-forward" />
                                 </Right>
                             </ListItem>
-                            <ListItem icon onPress={() => WebBrowser.openBrowserAsync("https://www.antonbourtnik.fr")}>
+                            <ListItem icon onPress={() => WebBrowser.openBrowserAsync("https://lmdfoot.com/")}>
                                 <Left>
                                     <Button style={{ backgroundColor: "#4CDA64" }}>
                                         <FontAwesome active name="info-circle" color={'white'} />
                                     </Button>
                                 </Left>
                                 <Body>
-                                    <Text>A propos du developpeur</Text>
+                                    <Text>A propos de Sporty</Text>
                                 </Body>
                                 <Right>
                                     <Icon name="arrow-forward" />
                                 </Right>
                             </ListItem>
-                            <ListItem icon onPress={() => Linking.openURL('mailto:contact@antonbourtnik.fr?subject=Contact à propos de l\'application Pop Corn')}>
+                            <ListItem icon onPress={() => Linking.openURL('mailto:contact@antonbourtnik.fr?subject=Contact à propos de l\'application Sporty')}>
                                 <Left>
                                     <Button style={{ backgroundColor: "#007AFF" }}>
                                         <FontAwesome active name="envelope" color={'white'} />
                                     </Button>
                                 </Left>
                                 <Body>
-                                    <Text>Contacter le developpeur</Text>
+                                    <Text>Contacter l'equipe</Text>
                                 </Body>
                                 <Right>
                                     <Icon name="arrow-forward" />

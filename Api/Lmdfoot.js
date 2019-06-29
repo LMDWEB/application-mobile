@@ -1,6 +1,3 @@
-import config from '../config'
-
-const API_TOKEN = '';
 const API_URL = 'https://api.lmdfoot.com';
 
 export function login (login, password) {

@@ -1,20 +1,13 @@
 import React from 'react';
-import {AsyncStorage, Platform, StatusBar, View, ScrollView, RefreshControl} from 'react-native';
+import {AsyncStorage, View} from 'react-native';
 import {
-    Container,
-    Header,
-    Content,
     Card,
     CardItem,
     Text,
     Icon,
-    Thumbnail,
-    Left,
     Body,
-    Textarea,
     Form,
     Button,
-    Right,
     Item,
     Input,
     Toast
@@ -34,28 +27,16 @@ class TabComments extends React.Component {
         this.state = {
             comment : '',
             comments : this.props.comments,
-            connected : false,
             isLoading : true,
             isOnline: false,
             refreshing: false
         };
     }
 
-    componentDidMount() {
-        this._navListener = this.props.navigation.addListener('didFocus', () => {
-            this._retrieveData();
-        });
-    }
-
-    componentWillUnmount() {
-        this._navListener.remove();
-    }
-
     _onRefresh = () => {
 
         getMatch(this.props.match_id, config.admin_jwt).then(data => {
             this.setState({
-                refreshing:false,
                 comments: data.comments,
             });
         });
@@ -90,20 +71,9 @@ class TabComments extends React.Component {
         this.setState({comment: text});
     }
 
-    _retrieveData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('JWT');
-            if (value !== null) {
-                this.setState({ connected: true})
-            }
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
-
     _showCommentForm () {
 
-            if (this.state.connected) {
+            if (this.props.connected) {
                 return (
                     <View>
                         <Text style={{textAlign: 'center',marginVertical: 20,fontSize:17, fontWeight: "bold"}}>Participer au match !!!</Text>
@@ -141,7 +111,11 @@ class TabComments extends React.Component {
             <View style={{paddingHorizontal: 10,backgroundColor:'#F6F6F6'}} >
                 {this._showCommentForm()}
                 <Text style={{textAlign: 'center',marginVertical: 20,fontSize:19, color:'#721c24',backgroundColor:'#f8d7da',borderColor: '#f5c6cb',padding: 10, borderWidth: 2,borderRadius: 4}}>Decouvrez les moments forts du match !!!</Text>
-                <ScrollView refreshControl={<RefreshControl style={{backgroundColor: 'transparent'}} refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}>
+                <Button style={{paddingRight: 30, width: '100%',marginRight:10,textAlign:'center'}} success onPress={() => this._onRefresh()}>
+                    <FontAwesome style={{paddingLeft: 15}} name='retweet' size={30} color={'white'}/>
+                    <Text>Voir les commentaires recents</Text>
+                </Button>
+                <View>
                 { (comments.length > 0) ?
                     comments.map(( comment, key ) =>
                         (
@@ -163,7 +137,7 @@ class TabComments extends React.Component {
                         <FontAwesome  name='comments' size={70} color={'grey'} />
                     </View>
                 }
-                </ScrollView>
+                </View>
             </View>
 
         );

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, TouchableOpacity, Text, ImageBackground,Dimensions} from 'react-native'
+import { View, Image, Text} from 'react-native'
 import card from '../Style/Card'
 
 class Card extends React.Component {
@@ -8,14 +8,24 @@ class Card extends React.Component {
         super(props);
     }
 
+    _showImage() {
+
+        const { data, type } = this.props;
+
+        if (type === 'player')
+            return (<Image style={card.image} source={ (data.image) ? { uri: data.image } : require('../Images/player-default.png') } />)
+        else
+            return (<Image style={card.image} source={ (data.logo) ? { uri: data.logo } : require('../Images/club-default.png') } />)
+    }
+
     render() {
 
         const { data } = this.props;
 
         return (
-            <View style={card.container} onPress={() => console.log("test")}>
+            <View style={card.container}>
                 <View style={card.image_container}>
-                    <Image style={card.image} source={ (data.logo) ? { uri: data.logo } : require('../Images/player-default.png') } />
+                    {this._showImage()}
                 </View>
                 <View style={card.info_container}>
                     <Text numberOfLines={2} style={card.title}>{data.name}</Text>

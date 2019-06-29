@@ -4,22 +4,15 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    ImageBackground,
-    Share,
-    Alert,
     TouchableOpacity,
-    Linking,
     FlatList,
     NetInfo,
     StatusBar,
-    Modal,
     Platform,
-    AsyncStorage
 } from 'react-native'
 import { Container, Content, Text, Header, Icon,Picker,Item,Form,Left,Right,Button,Body,Title } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import Match from '../Components/Match'
-import moment from 'moment'
 import details from '../Style/Detail'
 import styles from '../Style/Style'
 import config from '../config';

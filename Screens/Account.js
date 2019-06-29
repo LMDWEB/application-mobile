@@ -5,11 +5,9 @@ import {
     ActivityIndicator,
     NetInfo,
     TouchableOpacity,
-    RefreshControl,
     StatusBar,
     Platform,
     AsyncStorage,
-    Image
 } from 'react-native'
 import styles from '../Style/Style'
 import {
@@ -21,13 +19,11 @@ import {
     Right,
     Body,
     Text,
-    Item,
-    Input,
-    Form,
     Button,
     Icon,
     Toast,
-    Switch, ListItem, Separator
+    ListItem,
+    Separator
 } from 'native-base';
 import {getUser} from "../Api/Lmdfoot"
 import { FontAwesome } from '@expo/vector-icons';
@@ -60,14 +56,6 @@ class Account extends React.Component {
             }
         });
     }
-
-    _storeToken = async (token) => {
-        try {
-            await AsyncStorage.setItem('JWT', token);
-        } catch (error) {
-            console.log(error)
-        }
-    };
 
     componentDidMount() {
 
@@ -162,7 +150,6 @@ class Account extends React.Component {
                     <Content contentContainerStyle={{flex: 1}}>
                         <ScrollView>
                             <Separator bordered>
-                                <Text>Votre compte</Text>
                             </Separator>
                             <ListItem>
                                 <Text>{this.state.username}</Text>
@@ -172,7 +159,7 @@ class Account extends React.Component {
                             <View style={{padding: 10,}}>
                                 <Button iconLeft block danger onPress={() => this._logout()}>
                                     {this._displayLoading()}
-                                    <Text>Se deconecter</Text>
+                                    <Text>Se déconnecter</Text>
                                 </Button>
                             </View>
                         </ScrollView>
