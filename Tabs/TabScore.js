@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, Image, View} from 'react-native';
+import {AsyncStorage, Image, View, Platform} from 'react-native';
 import {
     Header,
     Text,
@@ -105,7 +105,7 @@ class TabScore extends React.Component {
 
         let scores = a.map(function(value, key){
             return (
-                <Picker.Item key={value} label={value} value={value} />
+                <Picker.Item key={value} label={value.toString()} value={value} />
             );
         });
 
@@ -113,16 +113,16 @@ class TabScore extends React.Component {
             return (
                 <View style={{backgroundColor:'#d1ecf1',paddingBottom: 20,borderWidth: 2,borderRadius: 4,borderColor: '#bee5eb',alignItems:'center',flex:1}}>
                     <Text style={styles.title}>Entrez votre score</Text>
-                    <Form style={{flexDirection: 'row',justifyContent:'space-evenly'}}>
-                        <Item picker style={{flex:1}}>
+                    <Form style={{}}>
+                        <Item picker style={{}}>
                             <Picker
                                 mode="dropdown"
                                 iosIcon={<Icon name="arrow-down" />}
-                                style={{ width: undefined,backgroundColor:'white'}}
+                                style={{ width: '100%',backgroundColor:'white'}}
                                 placeholder={"Score " + match.homeTeam.name}
                                 placeholderStyle={{ color: "black" }}
                                 placeholderIconColor="#007aff"
-                                selectedValue={this.state.scoreHomeTeam}
+                                selectedValue={(Platform.OS === 'android') ? 999 : this.state.scoreHomeTeam}
                                 onValueChange={this._handleSelectHomeTeam.bind(this)}
                                 renderHeader={backAction =>
                                     <Header>
@@ -137,14 +137,15 @@ class TabScore extends React.Component {
                                         <Right />
                                     </Header>}
                             >
+                                {(Platform.OS === 'android') ? <Picker.Item key={999} label={'Score ' + match.homeTeam.name} value={undefined} /> : null }
                                 {scores}
                             </Picker>
                         </Item>
-                        <Item picker style={{flex:1}}>
+                        <Item picker style={{marginTop:10}}>
                             <Picker
                                 mode="dropdown"
                                 iosIcon={<Icon name="arrow-down" />}
-                                style={{ width: undefined }}
+                                style={{ width: '100%',backgroundColor:'white' }}
                                 placeholder={"Score " + match.awayTeam.name}
                                 placeholderStyle={{ color: "black" }}
                                 placeholderIconColor="#007aff"
@@ -163,6 +164,7 @@ class TabScore extends React.Component {
                                         <Right />
                                     </Header>}
                             >
+                                {(Platform.OS === 'android') ? <Picker.Item key={999} label={'Score ' + match.awayTeam.name} value={undefined} /> : null }
                                 {scores}
                             </Picker>
                         </Item>

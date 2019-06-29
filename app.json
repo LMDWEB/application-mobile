@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "0.3",
+    "version": "0.6",
     "orientation": "portrait",
     "primaryColor": "#303a59",
     "icon": "./assets/icon.png",
@@ -26,7 +26,7 @@
     ],
     "ios": {
       "icon": "./assets/icon.png",
-      "appStoreUrl": "https://itunes.apple.com/fr/app/allocin%C3%A9-cin%C3%A9ma-et-s%C3%A9ries/id351184863?mt=8",
+      "appStoreUrl": "https://itunes.apple.com/fr/app/pop-corn/id1458543106?l=fr&ls=1&mt=8",
       "supportsTablet": false,
       "isTabletOnly": false,
       "infoPlist": {
@@ -44,7 +44,10 @@
       "backgroundColor": "#303a59"
     },
     "android": {
+      "package": "com.antonbourtnik.sporty",
+      "versionCode": 1,
       "icon": "./assets/icon.png",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.antonbourtnik.popcorn",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
