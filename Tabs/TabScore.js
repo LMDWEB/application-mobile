@@ -19,7 +19,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import { withNavigation } from 'react-navigation';
 
-import {addScore,getBestScore} from '../Api/Lmdfoot'
+import {addScore, getBestScore, getLastScoreByUser} from '../Api/Lmdfoot'
 
 class TabScore extends React.Component {
 
@@ -29,6 +29,8 @@ class TabScore extends React.Component {
         this.state = {
             scoreHomeTeam:undefined,
             scoreAwayTeam:undefined,
+            userScoreHomeTeam:undefined,
+            userScoreAwayTeam:undefined,
             bestScore: undefined,
             isLoading : true,
             isOnline: false,
@@ -38,6 +40,25 @@ class TabScore extends React.Component {
     componentDidMount() {
         const { match } = this.props;
 
+        Promise.all([
+            getBestScore(match.id, config.admin_jwt),
+            getLastScoreByUser(match.id, config.admin_jwt),
+        ]).then(([bestScore, lastScore]) => {
+            console.log(lastScore);
+            this.setState({
+                bestScore:bestScore,
+                userScoreHomeTeam:lastScore.scoreHomeTeam,
+                userScoreAwayTeam:lastScore.scoreAwayTeam,
+                isLoading: false,
+                isOnline: true
+            });
+        });
+    }
+
+    _refreshBestScore() {
+
+        const { match } = this.props;
+
         getBestScore(match.id, config.admin_jwt).then(data => {
             this.setState({
                 bestScore:data,
@@ -45,6 +66,7 @@ class TabScore extends React.Component {
                 isOnline: true
             });
         });
+
     }
 
     _handleSelectHomeTeam(score) {
@@ -66,8 +88,10 @@ class TabScore extends React.Component {
                 addScore(match.id, this.state.scoreHomeTeam, this.state.scoreAwayTeam, token).then(data => {
 
                     this.setState({
-                        scoreHomeTeam:data.scoreHomeTeam,
-                        scoreAwayTeam:data.scoreAwayTeam,
+                        scoreHomeTeam:null,
+                        scoreAwayTeam:null,
+                        userScoreHomeTeam:data.scoreHomeTeam,
+                        userScoreAwayTeam:data.scoreAwayTeam,
                     });
 
                     getBestScore(match.id, config.admin_jwt).then(data => {
@@ -137,7 +161,6 @@ class TabScore extends React.Component {
                                         <Right />
                                     </Header>}
                             >
-                                {(Platform.OS === 'android') ? <Picker.Item key={999} label={'Score ' + match.homeTeam.name} value={undefined} /> : null }
                                 {scores}
                             </Picker>
                         </Item>
@@ -164,7 +187,6 @@ class TabScore extends React.Component {
                                         <Right />
                                     </Header>}
                             >
-                                {(Platform.OS === 'android') ? <Picker.Item key={999} label={'Score ' + match.awayTeam.name} value={undefined} /> : null }
                                 {scores}
                             </Picker>
                         </Item>
@@ -210,6 +232,10 @@ class TabScore extends React.Component {
                     {this._showButtons()}
                     <View style={{paddingHorizontal: 10}}>
                         <Text style={styles.title}>Score Moyen</Text>
+                        <Button style={{flex: 1, marginBottom: 5}} small block success iconLeft onPress={() => this._refreshBestScore()}>
+                            <FontAwesome style={{marginLeft: 7}} name='retweet' size={18} color={'white'}/>
+                            <Text style={{fontSize:11}} numberOfLines={1}>Rafraishir</Text>
+                        </Button>
                         <View style={styles.card_container}>
                             <View style={{
                                 padding: 15,
@@ -253,7 +279,7 @@ class TabScore extends React.Component {
                                 <Text style={{
                                     fontWeight: 'bold',
                                     marginRight: 5
-                                }}> {(this.state.scoreHomeTeam) ? this.state.scoreHomeTeam : ' '} - {(this.state.scoreAwayTeam) ? this.state.scoreAwayTeam : ' '} </Text>
+                                }}> {(this.state.userScoreHomeTeam) ? this.state.userScoreHomeTeam : ' '} - {(this.state.userScoreAwayTeam) ? this.state.userScoreAwayTeam : ' '} </Text>
                                 <Image style={{width: 35, height: 35, marginRight: 5}}
                                        source={(match.awayTeam.logo) ? {uri: match.awayTeam.logo} : require('../Images/team.png')}/>
                                 <Text>{match.awayTeam.name} </Text>

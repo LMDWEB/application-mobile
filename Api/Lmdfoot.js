@@ -158,6 +158,19 @@ export function getBestScore (game_id, token) {
         .catch((error) => console.error(error));
 }
 
+export function getLastScoreByUser (game_id, token) {
+    const url = API_URL + '/api/lastsuggestbygame/' + game_id;
+    return fetch(url , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+        }
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+}
+
 export function getUser (token) {
     const url = API_URL + '/api/me';
     return fetch(url , {

@@ -58,7 +58,6 @@ class MatchDetail extends React.Component {
     _retrieveData = async () => {
         try {
             const value = await AsyncStorage.getItem('JWT');
-            console.log("hello");
             if (value !== null) {
                 this.setState({ isConnected: true})
             }

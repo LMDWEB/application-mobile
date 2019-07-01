@@ -3,7 +3,7 @@
     "name": "Sporty",
     "description": "Projet annuel sur le Football",
     "slug": "Sporty",
-    "privacy": "unlisted",
+    "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
