@@ -146,7 +146,7 @@ class TabScore extends React.Component {
                                 placeholder={"Score " + match.homeTeam.name}
                                 placeholderStyle={{ color: "black" }}
                                 placeholderIconColor="#007aff"
-                                selectedValue={(Platform.OS === 'android') ? 999 : this.state.scoreHomeTeam}
+                                selectedValue={this.state.scoreHomeTeam}
                                 onValueChange={this._handleSelectHomeTeam.bind(this)}
                                 renderHeader={backAction =>
                                     <Header>
