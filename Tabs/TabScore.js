@@ -19,7 +19,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import config from '../config'
 import { withNavigation } from 'react-navigation';
 
-import {addScore, getBestScore, getLastScoreByUser} from '../Api/Lmdfoot'
+import {addCommentary, addScore, getBestScore, getLastScoreByUser} from '../Api/Lmdfoot'
 
 class TabScore extends React.Component {
 
@@ -40,18 +40,28 @@ class TabScore extends React.Component {
     componentDidMount() {
         const { match } = this.props;
 
-        Promise.all([
-            getBestScore(match.id, config.admin_jwt),
-            getLastScoreByUser(match.id, config.admin_jwt),
-        ]).then(([bestScore, lastScore]) => {
-            console.log(lastScore);
+        // Best score
+
+        getBestScore(match.id, config.admin_jwt).then(data => {
             this.setState({
-                bestScore:bestScore,
-                userScoreHomeTeam:lastScore.scoreHomeTeam,
-                userScoreAwayTeam:lastScore.scoreAwayTeam,
+                bestScore:data,
                 isLoading: false,
                 isOnline: true
             });
+        });
+
+        // Last User Score
+
+        AsyncStorage.getItem("JWT").then((token) => {
+
+            if (token) {
+                getLastScoreByUser(match.id, token).then(data => {
+                    this.setState({
+                        userScoreHomeTeam:data.scoreHomeTeam,
+                        userScoreAwayTeam:data.scoreAwayTeam,
+                    });
+                });
+            }
         });
     }
 

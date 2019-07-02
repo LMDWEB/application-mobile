@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "0.6",
+    "version": "1.0",
     "orientation": "portrait",
     "primaryColor": "#303a59",
     "icon": "./assets/icon.png",
@@ -26,6 +26,8 @@
     ],
     "ios": {
       "icon": "./assets/icon.png",
+      "bundleIdentifier": "com.antonbourtnik.sporty",
+      "buildNumber": "1.0",
       "appStoreUrl": "https://itunes.apple.com/fr/app/pop-corn/id1458543106?l=fr&ls=1&mt=8",
       "supportsTablet": false,
       "isTabletOnly": false,
